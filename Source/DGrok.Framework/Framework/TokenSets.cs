@@ -23,438 +23,349 @@ using System.Text;
 
 namespace DGrok.Framework {
 	public static class TokenSets {
-		private static TokenSet _addOp;
-		private static TokenSet _block;
-		private static TokenSet _classDisposition;
-		private static TokenSet _constHeader;
-		private static TokenSet _directive;
-		private static TokenSet _exportsSpecifier;
-		private static TokenSet _expression;
-		private static TokenSet _extendedIdent;
-		private static TokenSet _forDirection;
-		private static TokenSet _forwardableType;
-		private static TokenSet _ident;
-		private static TokenSet _initSection;
-		private static TokenSet _interfaceType;
-		private static TokenSet _keyword;
-		private static TokenSet _labelId;
-		private static TokenSet _methodType;
-		private static TokenSet _mulOp;
-		private static TokenSet _parameter;
-		private static TokenSet _parameterizedPropertyDirective;
-		private static TokenSet _parameterlessPropertyDirective;
-		private static TokenSet _parameterModifier;
-		private static TokenSet _particle;
-		private static TokenSet _portabilityDirective;
-		private static TokenSet _program;
-		private static TokenSet _relOp;
-		private static TokenSet _semikeyword;
-		private static TokenSet _simpleParameterType;
-		private static TokenSet _unaryOperator;
-		private static TokenSet _uses;
-		private static TokenSet _varHeader;
-		private static TokenSet _visibility;
-		private static TokenSet _visibilitySingleWord;
+		public static TokenSet AddOp { get; }
+		public static TokenSet Block { get; }
+		public static TokenSet ClassDisposition { get; }
+		public static TokenSet ConstHeader { get; }
+		public static TokenSet Directive { get; }
+		public static TokenSet ExportsSpecifier { get; }
+		public static TokenSet Expression { get; }
+		public static TokenSet ExtendedIdent { get; }
+		public static TokenSet ForDirection { get; }
+		public static TokenSet ForwardableType { get; }
+		public static TokenSet Ident { get; }
+		public static TokenSet InitSection { get; }
+		public static TokenSet InterfaceType { get; }
+		public static TokenSet Keyword { get; }
+		public static TokenSet LabelId { get; }
+		public static TokenSet MethodType { get; }
+		public static TokenSet MulOp { get; }
+		public static TokenSet Parameter { get; }
+		public static TokenSet ParameterizedPropertyDirective { get; }
+		public static TokenSet ParameterlessPropertyDirective { get; }
+		public static TokenSet ParameterModifier { get; }
+		public static TokenSet Particle { get; }
+		public static TokenSet PortabilityDirective { get; }
+		public static TokenSet Program { get; }
+		public static TokenSet RelOp { get; }
+		public static TokenSet Semikeyword { get; }
+		public static TokenSet SimpleParameterType { get; }
+		public static TokenSet UnaryOperator { get; }
+		public static TokenSet Uses { get; }
+		public static TokenSet VarHeader { get; }
+		public static TokenSet Visibility { get; }
+		public static TokenSet VisibilitySingleWord { get; }
 
 		static TokenSets() {
-			_addOp = new TokenSet("addition operator");
-			_addOp.Add(TokenType.PlusSign);
-			_addOp.Add(TokenType.MinusSign);
-			_addOp.Add(TokenType.OrKeyword);
-			_addOp.Add(TokenType.XorKeyword);
+			AddOp = new TokenSet("addition operator");
+			AddOp.Add(TokenType.PlusSign);
+			AddOp.Add(TokenType.MinusSign);
+			AddOp.Add(TokenType.OrKeyword);
+			AddOp.Add(TokenType.XorKeyword);
 
-			_block = new TokenSet("block");
-			_block.Add(TokenType.BeginKeyword);
-			_block.Add(TokenType.AsmKeyword);
+			Block = new TokenSet("block");
+			Block.Add(TokenType.BeginKeyword);
+			Block.Add(TokenType.AsmKeyword);
 
-			_classDisposition = new TokenSet("class disposition");
-			_classDisposition.Add(TokenType.AbstractSemikeyword);
-			_classDisposition.Add(TokenType.SealedSemikeyword);
+			ClassDisposition = new TokenSet("class disposition");
+			ClassDisposition.Add(TokenType.AbstractSemikeyword);
+			ClassDisposition.Add(TokenType.SealedSemikeyword);
 
-			_constHeader = new TokenSet("const section");
-			_constHeader.Add(TokenType.ConstKeyword);
-			_constHeader.Add(TokenType.ResourceStringKeyword);
+			ConstHeader = new TokenSet("const section");
+			ConstHeader.Add(TokenType.ConstKeyword);
+			ConstHeader.Add(TokenType.ResourceStringKeyword);
 
-			_directive = new TokenSet("directive");
-			_directive.Add(TokenType.AbstractSemikeyword);
-			_directive.Add(TokenType.AssemblerSemikeyword);
-			_directive.Add(TokenType.CdeclSemikeyword);
-			_directive.Add(TokenType.DispIdSemikeyword);
-			_directive.Add(TokenType.DynamicSemikeyword);
-			_directive.Add(TokenType.ExportSemikeyword);
-			_directive.Add(TokenType.ExternalSemikeyword);
-			_directive.Add(TokenType.FarSemikeyword);
-			_directive.Add(TokenType.FinalSemikeyword);
-			_directive.Add(TokenType.ForwardSemikeyword);
-			_directive.Add(TokenType.InlineKeyword);
-			_directive.Add(TokenType.LocalSemikeyword);
-			_directive.Add(TokenType.MessageSemikeyword);
-			_directive.Add(TokenType.NearSemikeyword);
-			_directive.Add(TokenType.OverloadSemikeyword);
-			_directive.Add(TokenType.OverrideSemikeyword);
-			_directive.Add(TokenType.PascalSemikeyword);
-			_directive.Add(TokenType.RegisterSemikeyword);
-			_directive.Add(TokenType.ReintroduceSemikeyword);
-			_directive.Add(TokenType.SafecallSemikeyword);
-			_directive.Add(TokenType.StaticSemikeyword);
-			_directive.Add(TokenType.StdcallSemikeyword);
-			_directive.Add(TokenType.VarArgsSemikeyword);
-			_directive.Add(TokenType.VirtualSemikeyword);
+			Directive = new TokenSet("directive");
+			Directive.Add(TokenType.AbstractSemikeyword);
+			Directive.Add(TokenType.AssemblerSemikeyword);
+			Directive.Add(TokenType.CdeclSemikeyword);
+			Directive.Add(TokenType.DispIdSemikeyword);
+			Directive.Add(TokenType.DynamicSemikeyword);
+			Directive.Add(TokenType.ExportSemikeyword);
+			Directive.Add(TokenType.ExternalSemikeyword);
+			Directive.Add(TokenType.FarSemikeyword);
+			Directive.Add(TokenType.FinalSemikeyword);
+			Directive.Add(TokenType.ForwardSemikeyword);
+			Directive.Add(TokenType.InlineKeyword);
+			Directive.Add(TokenType.LocalSemikeyword);
+			Directive.Add(TokenType.MessageSemikeyword);
+			Directive.Add(TokenType.NearSemikeyword);
+			Directive.Add(TokenType.OverloadSemikeyword);
+			Directive.Add(TokenType.OverrideSemikeyword);
+			Directive.Add(TokenType.PascalSemikeyword);
+			Directive.Add(TokenType.RegisterSemikeyword);
+			Directive.Add(TokenType.ReintroduceSemikeyword);
+			Directive.Add(TokenType.SafecallSemikeyword);
+			Directive.Add(TokenType.StaticSemikeyword);
+			Directive.Add(TokenType.StdcallSemikeyword);
+			Directive.Add(TokenType.VarArgsSemikeyword);
+			Directive.Add(TokenType.VirtualSemikeyword);
 			// also includes PortabilityDirective, see below
 
-			_exportsSpecifier = new TokenSet("'index' or 'name'");
-			_exportsSpecifier.Add(TokenType.IndexSemikeyword);
-			_exportsSpecifier.Add(TokenType.NameSemikeyword);
+			ExportsSpecifier = new TokenSet("'index' or 'name'");
+			ExportsSpecifier.Add(TokenType.IndexSemikeyword);
+			ExportsSpecifier.Add(TokenType.NameSemikeyword);
 
-			_forDirection = new TokenSet("'to' or 'downto'");
-			_forDirection.Add(TokenType.ToKeyword);
-			_forDirection.Add(TokenType.DownToKeyword);
+			ForDirection = new TokenSet("'to' or 'downto'");
+			ForDirection.Add(TokenType.ToKeyword);
+			ForDirection.Add(TokenType.DownToKeyword);
 
-			_forwardableType = new TokenSet("forwardable type");
-			_forwardableType.Add(TokenType.ClassKeyword);
-			_forwardableType.Add(TokenType.DispInterfaceKeyword);
-			_forwardableType.Add(TokenType.InterfaceKeyword);
+			ForwardableType = new TokenSet("forwardable type");
+			ForwardableType.Add(TokenType.ClassKeyword);
+			ForwardableType.Add(TokenType.DispInterfaceKeyword);
+			ForwardableType.Add(TokenType.InterfaceKeyword);
 
-			_initSection = new TokenSet("initialization section");
-			_initSection.Add(TokenType.AsmKeyword);
-			_initSection.Add(TokenType.BeginKeyword);
-			_initSection.Add(TokenType.InitializationKeyword);
-			_initSection.Add(TokenType.EndKeyword);
+			InitSection = new TokenSet("initialization section");
+			InitSection.Add(TokenType.AsmKeyword);
+			InitSection.Add(TokenType.BeginKeyword);
+			InitSection.Add(TokenType.InitializationKeyword);
+			InitSection.Add(TokenType.EndKeyword);
 
-			_interfaceType = new TokenSet("interface type");
-			_interfaceType.Add(TokenType.InterfaceKeyword);
-			_interfaceType.Add(TokenType.DispInterfaceKeyword);
+			InterfaceType = new TokenSet("interface type");
+			InterfaceType.Add(TokenType.InterfaceKeyword);
+			InterfaceType.Add(TokenType.DispInterfaceKeyword);
 
-			_keyword = new TokenSet("keyword");
-			_keyword.Add(TokenType.AndKeyword);
-			_keyword.Add(TokenType.ArrayKeyword);
-			_keyword.Add(TokenType.AsKeyword);
-			_keyword.Add(TokenType.AsmKeyword);
-			_keyword.Add(TokenType.BeginKeyword);
-			_keyword.Add(TokenType.CaseKeyword);
-			_keyword.Add(TokenType.ClassKeyword);
-			_keyword.Add(TokenType.ConstKeyword);
-			_keyword.Add(TokenType.ConstructorKeyword);
-			_keyword.Add(TokenType.DestructorKeyword);
-			_keyword.Add(TokenType.DispInterfaceKeyword);
-			_keyword.Add(TokenType.DivKeyword);
-			_keyword.Add(TokenType.DoKeyword);
-			_keyword.Add(TokenType.DownToKeyword);
-			_keyword.Add(TokenType.ElseKeyword);
-			_keyword.Add(TokenType.EndKeyword);
-			_keyword.Add(TokenType.ExceptKeyword);
-			_keyword.Add(TokenType.ExportsKeyword);
-			_keyword.Add(TokenType.FileKeyword);
-			_keyword.Add(TokenType.FinalizationKeyword);
-			_keyword.Add(TokenType.FinallyKeyword);
-			_keyword.Add(TokenType.ForKeyword);
-			_keyword.Add(TokenType.FunctionKeyword);
-			_keyword.Add(TokenType.GotoKeyword);
-			_keyword.Add(TokenType.IfKeyword);
-			_keyword.Add(TokenType.ImplementationKeyword);
-			_keyword.Add(TokenType.InKeyword);
-			_keyword.Add(TokenType.InheritedKeyword);
-			_keyword.Add(TokenType.InitializationKeyword);
-			_keyword.Add(TokenType.InlineKeyword);
-			_keyword.Add(TokenType.InterfaceKeyword);
-			_keyword.Add(TokenType.IsKeyword);
-			_keyword.Add(TokenType.LabelKeyword);
-			_keyword.Add(TokenType.LibraryKeyword);
-			_keyword.Add(TokenType.ModKeyword);
-			_keyword.Add(TokenType.NilKeyword);
-			_keyword.Add(TokenType.NotKeyword);
-			_keyword.Add(TokenType.ObjectKeyword);
-			_keyword.Add(TokenType.OfKeyword);
-			_keyword.Add(TokenType.OrKeyword);
-			_keyword.Add(TokenType.PackedKeyword);
-			_keyword.Add(TokenType.ProcedureKeyword);
-			_keyword.Add(TokenType.ProgramKeyword);
-			_keyword.Add(TokenType.PropertyKeyword);
-			_keyword.Add(TokenType.RaiseKeyword);
-			_keyword.Add(TokenType.RecordKeyword);
-			_keyword.Add(TokenType.RepeatKeyword);
-			_keyword.Add(TokenType.ResourceStringKeyword);
-			_keyword.Add(TokenType.SetKeyword);
-			_keyword.Add(TokenType.ShlKeyword);
-			_keyword.Add(TokenType.ShrKeyword);
-			_keyword.Add(TokenType.StringKeyword);
-			_keyword.Add(TokenType.ThenKeyword);
-			_keyword.Add(TokenType.ThreadVarKeyword);
-			_keyword.Add(TokenType.ToKeyword);
-			_keyword.Add(TokenType.TryKeyword);
-			_keyword.Add(TokenType.TypeKeyword);
-			_keyword.Add(TokenType.UnitKeyword);
-			_keyword.Add(TokenType.UntilKeyword);
-			_keyword.Add(TokenType.UsesKeyword);
-			_keyword.Add(TokenType.VarKeyword);
-			_keyword.Add(TokenType.WhileKeyword);
-			_keyword.Add(TokenType.WithKeyword);
-			_keyword.Add(TokenType.XorKeyword);
+			Keyword = new TokenSet("keyword");
+			Keyword.Add(TokenType.AndKeyword);
+			Keyword.Add(TokenType.ArrayKeyword);
+			Keyword.Add(TokenType.AsKeyword);
+			Keyword.Add(TokenType.AsmKeyword);
+			Keyword.Add(TokenType.BeginKeyword);
+			Keyword.Add(TokenType.CaseKeyword);
+			Keyword.Add(TokenType.ClassKeyword);
+			Keyword.Add(TokenType.ConstKeyword);
+			Keyword.Add(TokenType.ConstructorKeyword);
+			Keyword.Add(TokenType.DestructorKeyword);
+			Keyword.Add(TokenType.DispInterfaceKeyword);
+			Keyword.Add(TokenType.DivKeyword);
+			Keyword.Add(TokenType.DoKeyword);
+			Keyword.Add(TokenType.DownToKeyword);
+			Keyword.Add(TokenType.ElseKeyword);
+			Keyword.Add(TokenType.EndKeyword);
+			Keyword.Add(TokenType.ExceptKeyword);
+			Keyword.Add(TokenType.ExportsKeyword);
+			Keyword.Add(TokenType.FileKeyword);
+			Keyword.Add(TokenType.FinalizationKeyword);
+			Keyword.Add(TokenType.FinallyKeyword);
+			Keyword.Add(TokenType.ForKeyword);
+			Keyword.Add(TokenType.FunctionKeyword);
+			Keyword.Add(TokenType.GotoKeyword);
+			Keyword.Add(TokenType.IfKeyword);
+			Keyword.Add(TokenType.ImplementationKeyword);
+			Keyword.Add(TokenType.InKeyword);
+			Keyword.Add(TokenType.InheritedKeyword);
+			Keyword.Add(TokenType.InitializationKeyword);
+			Keyword.Add(TokenType.InlineKeyword);
+			Keyword.Add(TokenType.InterfaceKeyword);
+			Keyword.Add(TokenType.IsKeyword);
+			Keyword.Add(TokenType.LabelKeyword);
+			Keyword.Add(TokenType.LibraryKeyword);
+			Keyword.Add(TokenType.ModKeyword);
+			Keyword.Add(TokenType.NilKeyword);
+			Keyword.Add(TokenType.NotKeyword);
+			Keyword.Add(TokenType.ObjectKeyword);
+			Keyword.Add(TokenType.OfKeyword);
+			Keyword.Add(TokenType.OrKeyword);
+			Keyword.Add(TokenType.PackedKeyword);
+			Keyword.Add(TokenType.ProcedureKeyword);
+			Keyword.Add(TokenType.ProgramKeyword);
+			Keyword.Add(TokenType.PropertyKeyword);
+			Keyword.Add(TokenType.RaiseKeyword);
+			Keyword.Add(TokenType.RecordKeyword);
+			Keyword.Add(TokenType.RepeatKeyword);
+			Keyword.Add(TokenType.ResourceStringKeyword);
+			Keyword.Add(TokenType.SetKeyword);
+			Keyword.Add(TokenType.ShlKeyword);
+			Keyword.Add(TokenType.ShrKeyword);
+			Keyword.Add(TokenType.StringKeyword);
+			Keyword.Add(TokenType.ThenKeyword);
+			Keyword.Add(TokenType.ThreadVarKeyword);
+			Keyword.Add(TokenType.ToKeyword);
+			Keyword.Add(TokenType.TryKeyword);
+			Keyword.Add(TokenType.TypeKeyword);
+			Keyword.Add(TokenType.UnitKeyword);
+			Keyword.Add(TokenType.UntilKeyword);
+			Keyword.Add(TokenType.UsesKeyword);
+			Keyword.Add(TokenType.VarKeyword);
+			Keyword.Add(TokenType.WhileKeyword);
+			Keyword.Add(TokenType.WithKeyword);
+			Keyword.Add(TokenType.XorKeyword);
 
-			_methodType = new TokenSet("method heading");
-			_methodType.Add(TokenType.ConstructorKeyword);
-			_methodType.Add(TokenType.DestructorKeyword);
-			_methodType.Add(TokenType.FunctionKeyword);
-			_methodType.Add(TokenType.ProcedureKeyword);
-			_methodType.Add(TokenType.OperatorSemikeyword);
+			MethodType = new TokenSet("method heading");
+			MethodType.Add(TokenType.ConstructorKeyword);
+			MethodType.Add(TokenType.DestructorKeyword);
+			MethodType.Add(TokenType.FunctionKeyword);
+			MethodType.Add(TokenType.ProcedureKeyword);
+			MethodType.Add(TokenType.OperatorSemikeyword);
 
-			_mulOp = new TokenSet("multiplication operator");
-			_mulOp.Add(TokenType.TimesSign);
-			_mulOp.Add(TokenType.DivideBySign);
-			_mulOp.Add(TokenType.DivKeyword);
-			_mulOp.Add(TokenType.AndKeyword);
-			_mulOp.Add(TokenType.ModKeyword);
-			_mulOp.Add(TokenType.ShlKeyword);
-			_mulOp.Add(TokenType.ShrKeyword);
+			MulOp = new TokenSet("multiplication operator");
+			MulOp.Add(TokenType.TimesSign);
+			MulOp.Add(TokenType.DivideBySign);
+			MulOp.Add(TokenType.DivKeyword);
+			MulOp.Add(TokenType.AndKeyword);
+			MulOp.Add(TokenType.ModKeyword);
+			MulOp.Add(TokenType.ShlKeyword);
+			MulOp.Add(TokenType.ShrKeyword);
 
-			_parameterizedPropertyDirective = new TokenSet("property directive");
-			_parameterizedPropertyDirective.Add(TokenType.DefaultSemikeyword);
-			_parameterizedPropertyDirective.Add(TokenType.DispIdSemikeyword);
-			_parameterizedPropertyDirective.Add(TokenType.ImplementsSemikeyword);
-			_parameterizedPropertyDirective.Add(TokenType.IndexSemikeyword);
-			_parameterizedPropertyDirective.Add(TokenType.ReadSemikeyword);
-			_parameterizedPropertyDirective.Add(TokenType.StoredSemikeyword);
-			_parameterizedPropertyDirective.Add(TokenType.WriteSemikeyword);
+			ParameterizedPropertyDirective = new TokenSet("property directive");
+			ParameterizedPropertyDirective.Add(TokenType.DefaultSemikeyword);
+			ParameterizedPropertyDirective.Add(TokenType.DispIdSemikeyword);
+			ParameterizedPropertyDirective.Add(TokenType.ImplementsSemikeyword);
+			ParameterizedPropertyDirective.Add(TokenType.IndexSemikeyword);
+			ParameterizedPropertyDirective.Add(TokenType.ReadSemikeyword);
+			ParameterizedPropertyDirective.Add(TokenType.StoredSemikeyword);
+			ParameterizedPropertyDirective.Add(TokenType.WriteSemikeyword);
 
-			_parameterlessPropertyDirective = new TokenSet("property directive");
-			_parameterlessPropertyDirective.Add(TokenType.NoDefaultSemikeyword);
-			_parameterlessPropertyDirective.Add(TokenType.ReadOnlySemikeyword);
-			_parameterlessPropertyDirective.Add(TokenType.WriteOnlySemikeyword);
+			ParameterlessPropertyDirective = new TokenSet("property directive");
+			ParameterlessPropertyDirective.Add(TokenType.NoDefaultSemikeyword);
+			ParameterlessPropertyDirective.Add(TokenType.ReadOnlySemikeyword);
+			ParameterlessPropertyDirective.Add(TokenType.WriteOnlySemikeyword);
 
-			_parameterModifier = new TokenSet("parameter modifier");
-			_parameterModifier.Add(TokenType.ConstKeyword);
-			_parameterModifier.Add(TokenType.OutSemikeyword);
-			_parameterModifier.Add(TokenType.VarKeyword);
+			ParameterModifier = new TokenSet("parameter modifier");
+			ParameterModifier.Add(TokenType.ConstKeyword);
+			ParameterModifier.Add(TokenType.OutSemikeyword);
+			ParameterModifier.Add(TokenType.VarKeyword);
 
-			_portabilityDirective = new TokenSet("portability directive");
-			_portabilityDirective.Add(TokenType.PlatformSemikeyword);
-			_portabilityDirective.Add(TokenType.DeprecatedSemikeyword);
-			_portabilityDirective.Add(TokenType.LibraryKeyword);
-			_portabilityDirective.Add(TokenType.ExperimentalSemikeyword);
+			PortabilityDirective = new TokenSet("portability directive");
+			PortabilityDirective.Add(TokenType.PlatformSemikeyword);
+			PortabilityDirective.Add(TokenType.DeprecatedSemikeyword);
+			PortabilityDirective.Add(TokenType.LibraryKeyword);
+			PortabilityDirective.Add(TokenType.ExperimentalSemikeyword);
 
-			_program = new TokenSet("program");
-			_program.Add(TokenType.ProgramKeyword);
-			_program.Add(TokenType.LibraryKeyword);
+			Program = new TokenSet("program");
+			Program.Add(TokenType.ProgramKeyword);
+			Program.Add(TokenType.LibraryKeyword);
 
-			_relOp = new TokenSet("relational operator");
-			_relOp.Add(TokenType.EqualSign);
-			_relOp.Add(TokenType.GreaterThan);
-			_relOp.Add(TokenType.LessThan);
-			_relOp.Add(TokenType.LessOrEqual);
-			_relOp.Add(TokenType.GreaterOrEqual);
-			_relOp.Add(TokenType.NotEqual);
-			_relOp.Add(TokenType.InKeyword);
-			_relOp.Add(TokenType.IsKeyword);
-			_relOp.Add(TokenType.AsKeyword);
+			RelOp = new TokenSet("relational operator");
+			RelOp.Add(TokenType.EqualSign);
+			RelOp.Add(TokenType.GreaterThan);
+			RelOp.Add(TokenType.LessThan);
+			RelOp.Add(TokenType.LessOrEqual);
+			RelOp.Add(TokenType.GreaterOrEqual);
+			RelOp.Add(TokenType.NotEqual);
+			RelOp.Add(TokenType.InKeyword);
+			RelOp.Add(TokenType.IsKeyword);
+			RelOp.Add(TokenType.AsKeyword);
 
-			_semikeyword = new TokenSet("semikeyword");
-			_semikeyword.Add(TokenType.AbsoluteSemikeyword);
-			_semikeyword.Add(TokenType.AbstractSemikeyword);
-			_semikeyword.Add(TokenType.AssemblerSemikeyword);
-			_semikeyword.Add(TokenType.AssemblySemikeyword);
-			_semikeyword.Add(TokenType.AtSemikeyword);
-			_semikeyword.Add(TokenType.AutomatedSemikeyword);
-			_semikeyword.Add(TokenType.CdeclSemikeyword);
-			_semikeyword.Add(TokenType.ContainsSemikeyword);
-			_semikeyword.Add(TokenType.DefaultSemikeyword);
-			_semikeyword.Add(TokenType.DeprecatedSemikeyword);
-			_semikeyword.Add(TokenType.DispIdSemikeyword);
-			_semikeyword.Add(TokenType.DynamicSemikeyword);
-			_semikeyword.Add(TokenType.ExperimentalSemikeyword);
-			_semikeyword.Add(TokenType.ExportSemikeyword);
-			_semikeyword.Add(TokenType.ExternalSemikeyword);
-			_semikeyword.Add(TokenType.FarSemikeyword);
-			_semikeyword.Add(TokenType.FinalSemikeyword);
-			_semikeyword.Add(TokenType.ForwardSemikeyword);
-			_semikeyword.Add(TokenType.HelperSemikeyword);
-			_semikeyword.Add(TokenType.ImplementsSemikeyword);
-			_semikeyword.Add(TokenType.IndexSemikeyword);
-			_semikeyword.Add(TokenType.LocalSemikeyword);
-			_semikeyword.Add(TokenType.MessageSemikeyword);
-			_semikeyword.Add(TokenType.NameSemikeyword);
-			_semikeyword.Add(TokenType.NearSemikeyword);
-			_semikeyword.Add(TokenType.NoDefaultSemikeyword);
-			_semikeyword.Add(TokenType.OnSemikeyword);
-			_semikeyword.Add(TokenType.OperatorSemikeyword);
-			_semikeyword.Add(TokenType.OutSemikeyword);
-			_semikeyword.Add(TokenType.OverloadSemikeyword);
-			_semikeyword.Add(TokenType.OverrideSemikeyword);
-			_semikeyword.Add(TokenType.PackageSemikeyword);
-			_semikeyword.Add(TokenType.PascalSemikeyword);
-			_semikeyword.Add(TokenType.PlatformSemikeyword);
-			_semikeyword.Add(TokenType.PrivateSemikeyword);
-			_semikeyword.Add(TokenType.ProtectedSemikeyword);
-			_semikeyword.Add(TokenType.PublicSemikeyword);
-			_semikeyword.Add(TokenType.PublishedSemikeyword);
-			_semikeyword.Add(TokenType.ReadSemikeyword);
-			_semikeyword.Add(TokenType.ReadOnlySemikeyword);
-			_semikeyword.Add(TokenType.RegisterSemikeyword);
-			_semikeyword.Add(TokenType.ReintroduceSemikeyword);
-			_semikeyword.Add(TokenType.RequiresSemikeyword);
-			_semikeyword.Add(TokenType.ResidentSemikeyword);
-			_semikeyword.Add(TokenType.SafecallSemikeyword);
-			_semikeyword.Add(TokenType.SealedSemikeyword);
-			_semikeyword.Add(TokenType.StaticSemikeyword);
-			_semikeyword.Add(TokenType.StdcallSemikeyword);
-			_semikeyword.Add(TokenType.StoredSemikeyword);
-			_semikeyword.Add(TokenType.StrictSemikeyword);
-			_semikeyword.Add(TokenType.UnsafeSemikeyword);
-			_semikeyword.Add(TokenType.VarArgsSemikeyword);
-			_semikeyword.Add(TokenType.VirtualSemikeyword);
-			_semikeyword.Add(TokenType.WriteSemikeyword);
-			_semikeyword.Add(TokenType.WriteOnlySemikeyword);
+			Semikeyword = new TokenSet("semikeyword");
+			Semikeyword.Add(TokenType.AbsoluteSemikeyword);
+			Semikeyword.Add(TokenType.AbstractSemikeyword);
+			Semikeyword.Add(TokenType.AssemblerSemikeyword);
+			Semikeyword.Add(TokenType.AssemblySemikeyword);
+			Semikeyword.Add(TokenType.AtSemikeyword);
+			Semikeyword.Add(TokenType.AutomatedSemikeyword);
+			Semikeyword.Add(TokenType.CdeclSemikeyword);
+			Semikeyword.Add(TokenType.ContainsSemikeyword);
+			Semikeyword.Add(TokenType.DefaultSemikeyword);
+			Semikeyword.Add(TokenType.DeprecatedSemikeyword);
+			Semikeyword.Add(TokenType.DispIdSemikeyword);
+			Semikeyword.Add(TokenType.DynamicSemikeyword);
+			Semikeyword.Add(TokenType.ExperimentalSemikeyword);
+			Semikeyword.Add(TokenType.ExportSemikeyword);
+			Semikeyword.Add(TokenType.ExternalSemikeyword);
+			Semikeyword.Add(TokenType.FarSemikeyword);
+			Semikeyword.Add(TokenType.FinalSemikeyword);
+			Semikeyword.Add(TokenType.ForwardSemikeyword);
+			Semikeyword.Add(TokenType.HelperSemikeyword);
+			Semikeyword.Add(TokenType.ImplementsSemikeyword);
+			Semikeyword.Add(TokenType.IndexSemikeyword);
+			Semikeyword.Add(TokenType.LocalSemikeyword);
+			Semikeyword.Add(TokenType.MessageSemikeyword);
+			Semikeyword.Add(TokenType.NameSemikeyword);
+			Semikeyword.Add(TokenType.NearSemikeyword);
+			Semikeyword.Add(TokenType.NoDefaultSemikeyword);
+			Semikeyword.Add(TokenType.OnSemikeyword);
+			Semikeyword.Add(TokenType.OperatorSemikeyword);
+			Semikeyword.Add(TokenType.OutSemikeyword);
+			Semikeyword.Add(TokenType.OverloadSemikeyword);
+			Semikeyword.Add(TokenType.OverrideSemikeyword);
+			Semikeyword.Add(TokenType.PackageSemikeyword);
+			Semikeyword.Add(TokenType.PascalSemikeyword);
+			Semikeyword.Add(TokenType.PlatformSemikeyword);
+			Semikeyword.Add(TokenType.PrivateSemikeyword);
+			Semikeyword.Add(TokenType.ProtectedSemikeyword);
+			Semikeyword.Add(TokenType.PublicSemikeyword);
+			Semikeyword.Add(TokenType.PublishedSemikeyword);
+			Semikeyword.Add(TokenType.ReadSemikeyword);
+			Semikeyword.Add(TokenType.ReadOnlySemikeyword);
+			Semikeyword.Add(TokenType.RegisterSemikeyword);
+			Semikeyword.Add(TokenType.ReintroduceSemikeyword);
+			Semikeyword.Add(TokenType.RequiresSemikeyword);
+			Semikeyword.Add(TokenType.ResidentSemikeyword);
+			Semikeyword.Add(TokenType.SafecallSemikeyword);
+			Semikeyword.Add(TokenType.SealedSemikeyword);
+			Semikeyword.Add(TokenType.StaticSemikeyword);
+			Semikeyword.Add(TokenType.StdcallSemikeyword);
+			Semikeyword.Add(TokenType.StoredSemikeyword);
+			Semikeyword.Add(TokenType.StrictSemikeyword);
+			Semikeyword.Add(TokenType.UnsafeSemikeyword);
+			Semikeyword.Add(TokenType.VarArgsSemikeyword);
+			Semikeyword.Add(TokenType.VirtualSemikeyword);
+			Semikeyword.Add(TokenType.WriteSemikeyword);
+			Semikeyword.Add(TokenType.WriteOnlySemikeyword);
 
-			_unaryOperator = new TokenSet("unary operator");
-			_unaryOperator.Add(TokenType.AtSign);
-			_unaryOperator.Add(TokenType.InheritedKeyword);
-			_unaryOperator.Add(TokenType.MinusSign);
-			_unaryOperator.Add(TokenType.NotKeyword);
-			_unaryOperator.Add(TokenType.PlusSign);
+			UnaryOperator = new TokenSet("unary operator");
+			UnaryOperator.Add(TokenType.AtSign);
+			UnaryOperator.Add(TokenType.InheritedKeyword);
+			UnaryOperator.Add(TokenType.MinusSign);
+			UnaryOperator.Add(TokenType.NotKeyword);
+			UnaryOperator.Add(TokenType.PlusSign);
 
-			_uses = new TokenSet("uses clause");
-			_uses.Add(TokenType.UsesKeyword);
-			_uses.Add(TokenType.ContainsSemikeyword);
+			Uses = new TokenSet("uses clause");
+			Uses.Add(TokenType.UsesKeyword);
+			Uses.Add(TokenType.ContainsSemikeyword);
 
-			_varHeader = new TokenSet("var section");
-			_varHeader.Add(TokenType.VarKeyword);
-			_varHeader.Add(TokenType.ThreadVarKeyword);
+			VarHeader = new TokenSet("var section");
+			VarHeader.Add(TokenType.VarKeyword);
+			VarHeader.Add(TokenType.ThreadVarKeyword);
 
-			_visibilitySingleWord = new TokenSet("'private', 'protected', 'public', or 'published'");
-			_visibilitySingleWord.Add(TokenType.PrivateSemikeyword);
-			_visibilitySingleWord.Add(TokenType.ProtectedSemikeyword);
-			_visibilitySingleWord.Add(TokenType.PublicSemikeyword);
-			_visibilitySingleWord.Add(TokenType.PublishedSemikeyword);
+			VisibilitySingleWord = new TokenSet("'private', 'protected', 'public', or 'published'");
+			VisibilitySingleWord.Add(TokenType.PrivateSemikeyword);
+			VisibilitySingleWord.Add(TokenType.ProtectedSemikeyword);
+			VisibilitySingleWord.Add(TokenType.PublicSemikeyword);
+			VisibilitySingleWord.Add(TokenType.PublishedSemikeyword);
 
-			_ident = new TokenSet("identifier");
-			_ident.Add(TokenType.Identifier);
-			_ident.AddRange(_semikeyword);
+			Ident = new TokenSet("identifier");
+			Ident.Add(TokenType.Identifier);
+			Ident.AddRange(Semikeyword);
 
-			_directive.AddRange(_portabilityDirective);
-			_particle = new TokenSet("expression");
-			_particle.Add(TokenType.FileKeyword);
-			_particle.Add(TokenType.NilKeyword);
-			_particle.Add(TokenType.Number);
-			_particle.Add(TokenType.OpenBracket);
-			_particle.Add(TokenType.OpenParenthesis);
-			_particle.Add(TokenType.StringKeyword);
-			_particle.Add(TokenType.StringLiteral);
-			_particle.AddRange(_ident);
-			_expression = new TokenSet("expression");
-			_expression.AddRange(_particle);
-			_expression.AddRange(_unaryOperator);
-			_extendedIdent = new TokenSet("identifier (including keyword)");
-			_extendedIdent.AddRange(_ident);
-			_extendedIdent.AddRange(_keyword);
-			_labelId = new TokenSet("label");
-			_labelId.Add(TokenType.Number);
-			_labelId.AddRange(_ident);
-			_parameter = new TokenSet("parameter");
-			_parameter.AddRange(_ident);
-			_parameter.AddRange(_parameterModifier);
-			_simpleParameterType = new TokenSet("parameter type");
-			_simpleParameterType.Add(TokenType.FileKeyword);
-			_simpleParameterType.Add(TokenType.StringKeyword);
-			_simpleParameterType.AddRange(_ident);
-			_visibility = new TokenSet("visibility specifier");
-			_visibility.Add(TokenType.StrictSemikeyword);
-			_visibility.AddRange(_visibilitySingleWord);
+			Directive.AddRange(PortabilityDirective);
+
+			Particle = new TokenSet("expression");
+			Particle.Add(TokenType.FileKeyword);
+			Particle.Add(TokenType.NilKeyword);
+			Particle.Add(TokenType.Number);
+			Particle.Add(TokenType.OpenBracket);
+			Particle.Add(TokenType.OpenParenthesis);
+			Particle.Add(TokenType.StringKeyword);
+			Particle.Add(TokenType.StringLiteral);
+			Particle.AddRange(Ident);
+
+			Expression = new TokenSet("expression");
+			Expression.AddRange(Particle);
+			Expression.AddRange(UnaryOperator);
+
+			ExtendedIdent = new TokenSet("identifier (including keyword)");
+			ExtendedIdent.AddRange(Ident);
+			ExtendedIdent.AddRange(Keyword);
+
+			LabelId = new TokenSet("label");
+			LabelId.Add(TokenType.Number);
+			LabelId.AddRange(Ident);
+
+			Parameter = new TokenSet("parameter");
+			Parameter.AddRange(Ident);
+			Parameter.AddRange(ParameterModifier);
+
+			SimpleParameterType = new TokenSet("parameter type");
+			SimpleParameterType.Add(TokenType.FileKeyword);
+			SimpleParameterType.Add(TokenType.StringKeyword);
+			SimpleParameterType.AddRange(Ident);
+
+			Visibility = new TokenSet("visibility specifier");
+			Visibility.Add(TokenType.StrictSemikeyword);
+			Visibility.AddRange(VisibilitySingleWord);
 		}
 
-		public static TokenSet AddOp {
-			get { return _addOp; }
-		}
-		public static TokenSet Block {
-			get { return _block; }
-		}
-		public static TokenSet ClassDisposition {
-			get { return _classDisposition; }
-		}
-		public static TokenSet ConstHeader {
-			get { return _constHeader; }
-		}
-		public static TokenSet Directive {
-			get { return _directive; }
-		}
-		public static TokenSet ExportsSpecifier {
-			get { return _exportsSpecifier; }
-		}
-		public static TokenSet Expression {
-			get { return _expression; }
-		}
-		public static TokenSet ExtendedIdent {
-			get { return _extendedIdent; }
-		}
-		public static TokenSet ForDirection {
-			get { return _forDirection; }
-		}
-		public static TokenSet ForwardableType {
-			get { return _forwardableType; }
-		}
-		public static TokenSet Ident {
-			get { return _ident; }
-		}
-		public static TokenSet InitSection {
-			get { return _initSection; }
-		}
-		public static TokenSet InterfaceType {
-			get { return _interfaceType; }
-		}
-		public static TokenSet Keyword {
-			get { return _keyword; }
-		}
-		public static TokenSet LabelId {
-			get { return _labelId; }
-		}
-		public static TokenSet MethodType {
-			get { return _methodType; }
-		}
-		public static TokenSet MulOp {
-			get { return _mulOp; }
-		}
-		public static TokenSet Parameter {
-			get { return _parameter; }
-		}
-		public static TokenSet ParameterizedPropertyDirective {
-			get { return _parameterizedPropertyDirective; }
-		}
-		public static TokenSet ParameterlessPropertyDirective {
-			get { return _parameterlessPropertyDirective; }
-		}
-		public static TokenSet ParameterModifier {
-			get { return _parameterModifier; }
-		}
-		public static TokenSet Particle {
-			get { return _particle; }
-		}
-		public static TokenSet PortabilityDirective {
-			get { return _portabilityDirective; }
-		}
-		public static TokenSet Program {
-			get { return _program; }
-		}
-		public static TokenSet RelOp {
-			get { return _relOp; }
-		}
-		public static TokenSet Semikeyword {
-			get { return _semikeyword; }
-		}
-		public static TokenSet SimpleParameterType {
-			get { return _simpleParameterType; }
-		}
-		public static TokenSet UnaryOperator {
-			get { return _unaryOperator; }
-		}
-		public static TokenSet Uses {
-			get { return _uses; }
-		}
-		public static TokenSet VarHeader {
-			get { return _varHeader; }
-		}
-		public static TokenSet Visibility {
-			get { return _visibility; }
-		}
-		public static TokenSet VisibilitySingleWord {
-			get { return _visibilitySingleWord; }
-		}
 	}
 }
