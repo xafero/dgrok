@@ -22,34 +22,28 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public class CodeBaseActionProxy
-    {
-        private string _description = "";
-        private Type _type;
+namespace DGrok.Framework {
+	public class CodeBaseActionProxy {
+		private string _description = "";
+		private Type _type;
 
-        public CodeBaseActionProxy(Type type)
-        {
-            _type = type;
-            object[] attributes = type.GetCustomAttributes(typeof(DescriptionAttribute), false);
-            if (attributes.Length > 0)
-                _description = ((DescriptionAttribute) attributes[0]).Description;
-        }
+		public CodeBaseActionProxy(Type type) {
+			_type = type;
+			object[] attributes = type.GetCustomAttributes(typeof(DescriptionAttribute), false);
+			if(attributes.Length > 0)
+				_description = ((DescriptionAttribute)attributes[0]).Description;
+		}
 
-        public string Description
-        {
-            get { return _description; }
-        }
-        public string Name
-        {
-            get { return _type.Name; }
-        }
+		public string Description {
+			get { return _description; }
+		}
+		public string Name {
+			get { return _type.Name; }
+		}
 
-        public IList<Hit> Execute(CodeBase codeBase)
-        {
-            ICodeBaseAction action = (ICodeBaseAction) Activator.CreateInstance(_type);
-            return action.Execute(codeBase);
-        }
-    }
+		public IList<Hit> Execute(CodeBase codeBase) {
+			ICodeBaseAction action = (ICodeBaseAction)Activator.CreateInstance(_type);
+			return action.Execute(codeBase);
+		}
+	}
 }

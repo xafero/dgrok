@@ -23,92 +23,74 @@ using System.ComponentModel;
 using System.Text;
 using System.Threading;
 
-namespace DGrok.Framework
-{
-    public class ConsumerScheduler<T>
-    {
-        private Action<T> _action;
-        private AutoResetEvent _allDoneEvent;
-        private BackgroundWorker _backgroundWorker;
-        private object _mutex = new object();
-        private Queue<T> _queue;
-        private int _runningThreadCount;
-        private string _taskDescription;
-        private int _threadCount;
+namespace DGrok.Framework {
+	public class ConsumerScheduler<T> {
+		private Action<T> _action;
+		private AutoResetEvent _allDoneEvent;
+		private BackgroundWorker _backgroundWorker;
+		private object _mutex = new object();
+		private Queue<T> _queue;
+		private int _runningThreadCount;
+		private string _taskDescription;
+		private int _threadCount;
 
-        public ConsumerScheduler(BackgroundWorker backgroundWorker, IEnumerable<T> items, Action<T> action,
-            int threadCount, string taskDescription)
-        {
-            if (threadCount < 1)
-                throw new ArgumentOutOfRangeException("threadCount", "Thread count must be at least 1");
-            _backgroundWorker = backgroundWorker;
-            _queue = new Queue<T>(items);
-            _action = action;
-            _threadCount = threadCount;
-            _taskDescription = taskDescription;
-        }
+		public ConsumerScheduler(BackgroundWorker backgroundWorker, IEnumerable<T> items, Action<T> action,
+			int threadCount, string taskDescription) {
+			if(threadCount < 1)
+				throw new ArgumentOutOfRangeException("threadCount", "Thread count must be at least 1");
+			_backgroundWorker = backgroundWorker;
+			_queue = new Queue<T>(items);
+			_action = action;
+			_threadCount = threadCount;
+			_taskDescription = taskDescription;
+		}
 
-        private void CheckForCancel()
-        {
-            if (_backgroundWorker.CancellationPending)
-                throw new CancelException();
-        }
-        public void Execute()
-        {
-            using (_allDoneEvent = new AutoResetEvent(false))
-            {
-                StartThreads();
-                WaitForThreadsToFinish();
-            }
-        }
-        private void StartThreads()
-        {
-            List<Thread> threads = new List<Thread>();
-            _runningThreadCount = _threadCount;
-            for (int i = 0; i < _threadCount; ++i)
-                ThreadPool.QueueUserWorkItem(ThreadProc);
-        }
-        private void ThreadProc(object state)
-        {
-            try
-            {
-                while (true)
-                {
-                    CheckForCancel();
-                    T item;
-                    lock (_mutex)
-                    {
-                        if (_queue.Count == 0)
-                            return;
-                        item = _queue.Dequeue();
-                    }
-                    _action(item);
-                }
-            }
-            catch (CancelException)
-            {
-            }
-            finally
-            {
-                lock (_mutex)
-                {
-                    --_runningThreadCount;
-                    if (_runningThreadCount <= 0)
-                        _allDoneEvent.Set();
-                }
-            }
-        }
-        private void WaitForThreadsToFinish()
-        {
-            while (!_allDoneEvent.WaitOne(250, false))
-            {
-                int itemsRemaining;
-                lock (_mutex)
-                    itemsRemaining = _queue.Count;
-                string progressMessage = _taskDescription + " (" + itemsRemaining + " item(s) remaining)";
-                _backgroundWorker.ReportProgress(0, progressMessage);
-            }
-            CheckForCancel();
-        }
-    }
+		private void CheckForCancel() {
+			if(_backgroundWorker.CancellationPending)
+				throw new CancelException();
+		}
+		public void Execute() {
+			using(_allDoneEvent = new AutoResetEvent(false)) {
+				StartThreads();
+				WaitForThreadsToFinish();
+			}
+		}
+		private void StartThreads() {
+			List<Thread> threads = new List<Thread>();
+			_runningThreadCount = _threadCount;
+			for(int i = 0; i < _threadCount; ++i)
+				ThreadPool.QueueUserWorkItem(ThreadProc);
+		}
+		private void ThreadProc(object state) {
+			try {
+				while(true) {
+					CheckForCancel();
+					T item;
+					lock (_mutex) {
+						if(_queue.Count == 0)
+							return;
+						item = _queue.Dequeue();
+					}
+					_action(item);
+				}
+			} catch(CancelException) {
+			} finally {
+				lock (_mutex) {
+					--_runningThreadCount;
+					if(_runningThreadCount <= 0)
+						_allDoneEvent.Set();
+				}
+			}
+		}
+		private void WaitForThreadsToFinish() {
+			while(!_allDoneEvent.WaitOne(250, false)) {
+				int itemsRemaining;
+				lock (_mutex)
+					itemsRemaining = _queue.Count;
+				string progressMessage = _taskDescription + " (" + itemsRemaining + " item(s) remaining)";
+				_backgroundWorker.ReportProgress(0, progressMessage);
+			}
+			CheckForCancel();
+		}
+	}
 }

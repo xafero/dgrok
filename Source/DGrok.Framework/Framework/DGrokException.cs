@@ -21,21 +21,17 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public class DGrokException : Exception
-    {
-        private Location _location;
+namespace DGrok.Framework {
+	public class DGrokException : Exception {
+		private Location _location;
 
-        public DGrokException(string message, Location location)
-            : base(message)
-        {
-            _location = location;
-        }
+		public DGrokException(string message, Location location)
+			: base(message) {
+			_location = location;
+		}
 
-        public Location Location
-        {
-            get { return _location; }
-        }
-    }
+		public Location Location {
+			get { return _location; }
+		}
+	}
 }

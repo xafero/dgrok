@@ -24,16 +24,13 @@ using System.Text;
 using DGrok.DelphiNodes;
 using DGrok.Framework;
 
-namespace DGrok.Visitors
-{
-    [CodeBaseAction(CategoryType.DotNetCompatibility)]
-    [Description("x86 assembler is not allowed in managed code.")]
-    public class FindAsmBlocks : Visitor
-    {
-        public override void VisitAssemblerStatementNode(AssemblerStatementNode node)
-        {
-            AddHit(node, node.ToCode());
-            base.VisitAssemblerStatementNode(node);
-        }
-    }
+namespace DGrok.Visitors {
+	[CodeBaseAction(CategoryType.DotNetCompatibility)]
+	[Description("x86 assembler is not allowed in managed code.")]
+	public class FindAsmBlocks : Visitor {
+		public override void VisitAssemblerStatementNode(AssemblerStatementNode node) {
+			AddHit(node, node.ToCode());
+			base.VisitAssemblerStatementNode(node);
+		}
+	}
 }

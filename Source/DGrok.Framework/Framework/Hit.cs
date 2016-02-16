@@ -22,26 +22,21 @@ using System.Collections.Generic;
 using System.Text;
 using DGrok.Framework;
 
-namespace DGrok.Framework
-{
-    public class Hit
-    {
-        private string _description;
-        private Location _location;
+namespace DGrok.Framework {
+	public class Hit {
+		private string _description;
+		private Location _location;
 
-        public Hit(Location location, string description)
-        {
-            _location = location;
-            _description = description;
-        }
+		public Hit(Location location, string description) {
+			_location = location;
+			_description = description;
+		}
 
-        public string Description
-        {
-            get { return _description; }
-        }
-        public Location Location
-        {
-            get { return _location; }
-        }
-    }
+		public string Description {
+			get { return _description; }
+		}
+		public Location Location {
+			get { return _location; }
+		}
+	}
 }

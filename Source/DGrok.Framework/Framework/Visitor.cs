@@ -21,52 +21,41 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public partial class Visitor : ICodeBaseAction
-    {
-        private List<Hit> _hits = new List<Hit>();
+namespace DGrok.Framework {
+	public partial class Visitor : ICodeBaseAction {
+		private List<Hit> _hits = new List<Hit>();
 
-        public IList<Hit> Hits
-        {
-            get { return _hits; }
-        }
+		public IList<Hit> Hits {
+			get { return _hits; }
+		}
 
-        public void AddHit(AstNode node, string description)
-        {
-            Hits.Add(new Hit(node.Location, description));
-        }
-        public IList<Hit> Execute(CodeBase codeBase)
-        {
-            Visit(codeBase);
-            return Hits;
-        }
-        public void Visit(CodeBase codeBase)
-        {
-            foreach (NamedContent<AstNode> node in codeBase.ParsedFiles)
-                VisitSourceFile(node.FileName, node.Content);
-        }
-        public void Visit(AstNode node)
-        {
-            if (node != null)
-                node.Accept(this);
-        }
-        public virtual void VisitDelimitedItemNode(AstNode node, AstNode item, Token delimiter)
-        {
-            Visit(item);
-            Visit(delimiter);
-        }
-        public virtual void VisitListNode(AstNode node, IEnumerable<AstNode> items)
-        {
-            foreach (AstNode item in items)
-                Visit(item);
-        }
-        public virtual void VisitSourceFile(string fileName, AstNode node)
-        {
-            Visit(node);
-        }
-        public virtual void VisitToken(Token token)
-        {
-        }
-    }
+		public void AddHit(AstNode node, string description) {
+			Hits.Add(new Hit(node.Location, description));
+		}
+		public IList<Hit> Execute(CodeBase codeBase) {
+			Visit(codeBase);
+			return Hits;
+		}
+		public void Visit(CodeBase codeBase) {
+			foreach(NamedContent<AstNode> node in codeBase.ParsedFiles)
+				VisitSourceFile(node.FileName, node.Content);
+		}
+		public void Visit(AstNode node) {
+			if(node != null)
+				node.Accept(this);
+		}
+		public virtual void VisitDelimitedItemNode(AstNode node, AstNode item, Token delimiter) {
+			Visit(item);
+			Visit(delimiter);
+		}
+		public virtual void VisitListNode(AstNode node, IEnumerable<AstNode> items) {
+			foreach(AstNode item in items)
+				Visit(item);
+		}
+		public virtual void VisitSourceFile(string fileName, AstNode node) {
+			Visit(node);
+		}
+		public virtual void VisitToken(Token token) {
+		}
+	}
 }

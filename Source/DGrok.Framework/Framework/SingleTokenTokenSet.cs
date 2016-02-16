@@ -21,29 +21,23 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public class SingleTokenTokenSet : ITokenSet
-    {
-        private TokenType _tokenType;
+namespace DGrok.Framework {
+	public class SingleTokenTokenSet : ITokenSet {
+		private TokenType _tokenType;
 
-        public SingleTokenTokenSet(TokenType tokenType)
-        {
-            _tokenType = tokenType;
-        }
+		public SingleTokenTokenSet(TokenType tokenType) {
+			_tokenType = tokenType;
+		}
 
-        public string Name
-        {
-            get { return _tokenType.ToString(); }
-        }
+		public string Name {
+			get { return _tokenType.ToString(); }
+		}
 
-        public bool Contains(TokenType value)
-        {
-            return value == _tokenType;
-        }
-        public bool LookAhead(Parser parser)
-        {
-            return parser.CanParseToken(this);
-        }
-    }
+		public bool Contains(TokenType value) {
+			return value == _tokenType;
+		}
+		public bool LookAhead(Parser parser) {
+			return parser.CanParseToken(this);
+		}
+	}
 }

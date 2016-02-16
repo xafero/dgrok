@@ -22,17 +22,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public class FileLoader : IFileLoader
-    {
-        public string ExpandFileName(string currentDirectory, string fileName)
-        {
-            return Path.Combine(currentDirectory, fileName);
-        }
-        public string Load(string fileName)
-        {
-            return File.ReadAllText(fileName);
-        }
-    }
+namespace DGrok.Framework {
+	public class FileLoader : IFileLoader {
+		public string ExpandFileName(string currentDirectory, string fileName) {
+			return Path.Combine(currentDirectory, fileName);
+		}
+		public string Load(string fileName) {
+			return File.ReadAllText(fileName);
+		}
+	}
 }

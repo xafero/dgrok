@@ -21,11 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public interface IFileLoader
-    {
-        string ExpandFileName(string currentDirectory, string fileName);
-        string Load(string expandedFileName);
-    }
+namespace DGrok.Framework {
+	public interface IFileLoader {
+		string ExpandFileName(string currentDirectory, string fileName);
+		string Load(string expandedFileName);
+	}
 }

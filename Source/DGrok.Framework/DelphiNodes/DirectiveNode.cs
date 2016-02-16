@@ -22,18 +22,14 @@ using System.Collections.Generic;
 using System.Text;
 using DGrok.Framework;
 
-namespace DGrok.DelphiNodes
-{
-    public partial class DirectiveNode
-    {
-        public bool ForbidsBody
-        {
-            get
-            {
-                return
-                    KeywordNode.Type == TokenType.ForwardSemikeyword ||
-                    KeywordNode.Type == TokenType.ExternalSemikeyword;
-            }
-        }
-    }
+namespace DGrok.DelphiNodes {
+	public partial class DirectiveNode {
+		public bool ForbidsBody {
+			get {
+				return
+					KeywordNode.Type == TokenType.ForwardSemikeyword ||
+					KeywordNode.Type == TokenType.ExternalSemikeyword;
+			}
+		}
+	}
 }

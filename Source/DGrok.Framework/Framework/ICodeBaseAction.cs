@@ -21,10 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public interface ICodeBaseAction
-    {
-        IList<Hit> Execute(CodeBase codeBase);
-    }
+namespace DGrok.Framework {
+	public interface ICodeBaseAction {
+		IList<Hit> Execute(CodeBase codeBase);
+	}
 }

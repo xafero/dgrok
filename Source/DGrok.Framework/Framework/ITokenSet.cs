@@ -21,13 +21,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public interface ITokenSet
-    {
-        string Name { get; }
+namespace DGrok.Framework {
+	public interface ITokenSet {
+		string Name { get; }
 
-        bool Contains(TokenType value);
-        bool LookAhead(Parser parser);
-    }
+		bool Contains(TokenType value);
+		bool LookAhead(Parser parser);
+	}
 }

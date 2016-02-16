@@ -21,21 +21,17 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    [AttributeUsage(AttributeTargets.Class)]
-    public class CodeBaseActionAttribute : Attribute
-    {
-        private CategoryType _category;
+namespace DGrok.Framework {
+	[AttributeUsage(AttributeTargets.Class)]
+	public class CodeBaseActionAttribute : Attribute {
+		private CategoryType _category;
 
-        public CodeBaseActionAttribute(CategoryType category)
-        {
-            _category = category;
-        }
+		public CodeBaseActionAttribute(CategoryType category) {
+			_category = category;
+		}
 
-        public CategoryType Category
-        {
-            get { return _category; }
-        }
-    }
+		public CategoryType Category {
+			get { return _category; }
+		}
+	}
 }

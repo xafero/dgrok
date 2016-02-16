@@ -25,66 +25,54 @@ using System.IO;
 using System.Text;
 using DGrok.DelphiNodes;
 
-namespace DGrok.Framework
-{
-    public class CodeBaseWorker
-    {
-        private BackgroundWorker _backgroundWorker;
-        private CodeBase _codeBase;
-        private List<string> _fileList;
-        private CodeBaseOptions _options;
+namespace DGrok.Framework {
+	public class CodeBaseWorker {
+		private BackgroundWorker _backgroundWorker;
+		private CodeBase _codeBase;
+		private List<string> _fileList;
+		private CodeBaseOptions _options;
 
-        private CodeBaseWorker(CodeBase codeBase, CodeBaseOptions options, BackgroundWorker backgroundWorker)
-        {
-            _codeBase = codeBase;
-            _options = options;
-            _backgroundWorker = backgroundWorker;
-        }
+		private CodeBaseWorker(CodeBase codeBase, CodeBaseOptions options, BackgroundWorker backgroundWorker) {
+			_codeBase = codeBase;
+			_options = options;
+			_backgroundWorker = backgroundWorker;
+		}
 
-        private void BuildFileList()
-        {
-            CheckForCancel();
-            _backgroundWorker.ReportProgress(0, "Building file list...");
-            _fileList = _options.ListFiles();
-        }
-        private void CheckForCancel()
-        {
-            if (_backgroundWorker.CancellationPending)
-                throw new CancelException();
-        }
-        public static CodeBase Execute(CodeBaseOptions options, BackgroundWorker backgroundWorker)
-        {
-            CodeBase codeBase = new CodeBase(options.CreateCompilerDefines(), new FileLoader());
-            CodeBaseWorker worker = new CodeBaseWorker(codeBase, options, backgroundWorker);
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            try
-            {
-                worker.ExecuteInternal();
-            }
-            catch (CancelException)
-            {
-            }
-            stopwatch.Stop();
-            codeBase.ParseDuration = stopwatch.Elapsed;
-            return codeBase;
-        }
-        private void ExecuteInternal()
-        {
-            BuildFileList();
-            ParseFiles();
-        }
-        private void ParseFile(string fileName)
-        {
-            CheckForCancel();
-            string text = File.ReadAllText(fileName);
-            _codeBase.AddFile(fileName, text);
-        }
-        private void ParseFiles()
-        {
-            ConsumerScheduler<string> scheduler = new ConsumerScheduler<string>(_backgroundWorker,
-                _fileList, ParseFile, _options.ParserThreadCount, "Parsing files");
-            scheduler.Execute();
-        }
-    }
+		private void BuildFileList() {
+			CheckForCancel();
+			_backgroundWorker.ReportProgress(0, "Building file list...");
+			_fileList = _options.ListFiles();
+		}
+		private void CheckForCancel() {
+			if(_backgroundWorker.CancellationPending)
+				throw new CancelException();
+		}
+		public static CodeBase Execute(CodeBaseOptions options, BackgroundWorker backgroundWorker) {
+			CodeBase codeBase = new CodeBase(options.CreateCompilerDefines(), new FileLoader());
+			CodeBaseWorker worker = new CodeBaseWorker(codeBase, options, backgroundWorker);
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
+			try {
+				worker.ExecuteInternal();
+			} catch(CancelException) {
+			}
+			stopwatch.Stop();
+			codeBase.ParseDuration = stopwatch.Elapsed;
+			return codeBase;
+		}
+		private void ExecuteInternal() {
+			BuildFileList();
+			ParseFiles();
+		}
+		private void ParseFile(string fileName) {
+			CheckForCancel();
+			string text = File.ReadAllText(fileName);
+			_codeBase.AddFile(fileName, text);
+		}
+		private void ParseFiles() {
+			ConsumerScheduler<string> scheduler = new ConsumerScheduler<string>(_backgroundWorker,
+				_fileList, ParseFile, _options.ParserThreadCount, "Parsing files");
+			scheduler.Execute();
+		}
+	}
 }

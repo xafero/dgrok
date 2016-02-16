@@ -21,11 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public class LexException : DGrokException
-    {
-        public LexException(string message, Location location)
-            : base(message, location) { }
-    }
+namespace DGrok.Framework {
+	public class LexException : DGrokException {
+		public LexException(string message, Location location)
+			: base(message, location) { }
+	}
 }

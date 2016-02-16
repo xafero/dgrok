@@ -22,21 +22,16 @@ using System.Collections.Generic;
 using System.Text;
 using DGrok.Framework;
 
-namespace DGrok.DelphiNodes
-{
-    public partial class MethodHeadingNode
-    {
-        public bool RequiresBody
-        {
-            get
-            {
-                foreach (DirectiveNode directive in DirectiveListNode.Items)
-                {
-                    if (directive.ForbidsBody)
-                        return false;
-                }
-                return true;
-            }
-        }
-    }
+namespace DGrok.DelphiNodes {
+	public partial class MethodHeadingNode {
+		public bool RequiresBody {
+			get {
+				foreach(DirectiveNode directive in DirectiveListNode.Items) {
+					if(directive.ForbidsBody)
+						return false;
+				}
+				return true;
+			}
+		}
+	}
 }

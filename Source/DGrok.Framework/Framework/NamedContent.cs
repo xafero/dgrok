@@ -22,30 +22,24 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public class NamedContent<T>
-    {
-        private T _content;
-        private string _fileName;
+namespace DGrok.Framework {
+	public class NamedContent<T> {
+		private T _content;
+		private string _fileName;
 
-        public NamedContent(string fileName, T content)
-        {
-            _fileName = fileName;
-            _content = content;
-        }
+		public NamedContent(string fileName, T content) {
+			_fileName = fileName;
+			_content = content;
+		}
 
-        public T Content
-        {
-            get { return _content; }
-        }
-        public string FileName
-        {
-            get { return _fileName; }
-        }
-        public string Name
-        {
-            get { return Path.GetFileNameWithoutExtension(_fileName); }
-        }
-    }
+		public T Content {
+			get { return _content; }
+		}
+		public string FileName {
+			get { return _fileName; }
+		}
+		public string Name {
+			get { return Path.GetFileNameWithoutExtension(_fileName); }
+		}
+	}
 }

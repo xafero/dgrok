@@ -22,11 +22,9 @@ using System.Collections.Generic;
 using System.Text;
 using DGrok.Framework;
 
-namespace DGrok.DelphiNodes
-{
-    public interface ITypeDeclaration
-    {
-        AstNode FirstNameNode { get; }
-        AstNode TypeNode { get; }
-    }
+namespace DGrok.DelphiNodes {
+	public interface ITypeDeclaration {
+		AstNode FirstNameNode { get; }
+		AstNode TypeNode { get; }
+	}
 }

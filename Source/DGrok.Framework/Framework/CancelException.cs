@@ -21,11 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public class CancelException : Exception
-    {
-        public CancelException()
-            : base("Operation canceled") { }
-    }
+namespace DGrok.Framework {
+	public class CancelException : Exception {
+		public CancelException()
+			: base("Operation canceled") { }
+	}
 }

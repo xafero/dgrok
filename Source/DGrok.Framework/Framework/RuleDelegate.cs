@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public delegate AstNode RuleDelegate();
+namespace DGrok.Framework {
+	public delegate AstNode RuleDelegate();
 }

@@ -22,15 +22,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public enum CategoryType
-    {
-        [Description("Finds problematic code constructs.")]
-        BestPracticeViolations,
-        [Description("Finds code that will not compile in Delphi for .NET.")]
-        DotNetCompatibility,
-        [Description("Finds code that will not play well with other .NET languages.")]
-        DotNetInterop,
-    }
+namespace DGrok.Framework {
+	public enum CategoryType {
+		[Description("Finds problematic code constructs.")]
+		BestPracticeViolations,
+		[Description("Finds code that will not compile in Delphi for .NET.")]
+		DotNetCompatibility,
+		[Description("Finds code that will not play well with other .NET languages.")]
+		DotNetInterop,
+	}
 }

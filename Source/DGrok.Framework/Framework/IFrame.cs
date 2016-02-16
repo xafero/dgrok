@@ -21,17 +21,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public interface IFrame
-    {
-        string DisplayName { get; }
-        bool IsEof { get; }
-        Location Location { get; }
-        IFrame Next { get; set; }
-        TokenType TokenType { get; }
+namespace DGrok.Framework {
+	public interface IFrame {
+		string DisplayName { get; }
+		bool IsEof { get; }
+		Location Location { get; }
+		IFrame Next { get; set; }
+		TokenType TokenType { get; }
 
-        bool CanParseToken(ITokenSet tokenSet);
-        Token ParseToken(ITokenSet tokenSet);
-    }
+		bool CanParseToken(ITokenSet tokenSet);
+		Token ParseToken(ITokenSet tokenSet);
+	}
 }

@@ -22,13 +22,10 @@ using System.Collections.Generic;
 using System.Text;
 using DGrok.Framework;
 
-namespace DGrok.DelphiNodes
-{
-    public partial class ConstantDeclNode : ITypeDeclaration
-    {
-        public AstNode FirstNameNode
-        {
-            get { return NameNode; }
-        }
-    }
+namespace DGrok.DelphiNodes {
+	public partial class ConstantDeclNode : ITypeDeclaration {
+		public AstNode FirstNameNode {
+			get { return NameNode; }
+		}
+	}
 }

@@ -24,20 +24,17 @@ using System.Text;
 using DGrok.DelphiNodes;
 using DGrok.Framework;
 
-namespace DGrok.Visitors
-{
-    [CodeBaseAction(CategoryType.DotNetCompatibility)]
-    [Description("Variant records are not typesafe, and are not allowed in managed code.")]
-    public class FindVariantRecords : Visitor
-    {
-        public override void VisitVariantSectionNode(VariantSectionNode node)
-        {
-            RecordTypeNode record = node.ParentNodeOfType<RecordTypeNode>();
-            ITypeDeclaration typeDeclaration = record.ParentNodeOfType<ITypeDeclaration>();
-            AddHit(node,
-                AstNode.ToCode(typeDeclaration.FirstNameNode, record.RecordKeywordNode) + " ... " +
-                AstNode.ToCode(node.CaseKeywordNode, node.OfKeywordNode));
-            base.VisitVariantSectionNode(node);
-        }
-    }
+namespace DGrok.Visitors {
+	[CodeBaseAction(CategoryType.DotNetCompatibility)]
+	[Description("Variant records are not typesafe, and are not allowed in managed code.")]
+	public class FindVariantRecords : Visitor {
+		public override void VisitVariantSectionNode(VariantSectionNode node) {
+			RecordTypeNode record = node.ParentNodeOfType<RecordTypeNode>();
+			ITypeDeclaration typeDeclaration = record.ParentNodeOfType<ITypeDeclaration>();
+			AddHit(node,
+				AstNode.ToCode(typeDeclaration.FirstNameNode, record.RecordKeywordNode) + " ... " +
+				AstNode.ToCode(node.CaseKeywordNode, node.OfKeywordNode));
+			base.VisitVariantSectionNode(node);
+		}
+	}
 }

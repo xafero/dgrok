@@ -19,78 +19,68 @@
 // THE SOFTWARE.
 using System;
 
-namespace DGrok.Framework
-{
-    public class CompilerOptions
-    {
-        private string _optionsSetOff = "";
-        private string _optionsSetOn = "";
+namespace DGrok.Framework {
+	public class CompilerOptions {
+		private string _optionsSetOff = "";
+		private string _optionsSetOn = "";
 
-        public string OptionsSetOff
-        {
-            get { return _optionsSetOff; }
-            set { _optionsSetOff = value.ToUpperInvariant(); }
-        }
-        public string OptionsSetOn
-        {
-            get { return _optionsSetOn; }
-            set { _optionsSetOn = value.ToUpperInvariant(); }
-        }
+		public string OptionsSetOff {
+			get { return _optionsSetOff; }
+			set { _optionsSetOff = value.ToUpperInvariant(); }
+		}
+		public string OptionsSetOn {
+			get { return _optionsSetOn; }
+			set { _optionsSetOn = value.ToUpperInvariant(); }
+		}
 
-        private bool? GetOptionDefault(char option)
-        {
-            switch (option)
-            {
-                case 'B': return false;
-                case 'C': return true;
-                case 'D': return true;
-                case 'E': return false;
-                case 'F': return false;
-                case 'G': return true;
-                case 'H': return true;
-                case 'I': return true;
-                case 'J': return false;
-                case 'K': return false;
-                case 'L': return true;
-                case 'M': return false;
-                case 'N': return true;
-                case 'O': return true;
-                case 'P': return true;
-                case 'Q': return false;
-                case 'R': return false;
-                case 'S': return false;
-                case 'T': return false;
-                case 'U': return false;
-                case 'V': return true;
-                case 'W': return false;
-                case 'X': return true;
-                case 'Y': return true;
-                case 'Z': return false;
-                default: return null;
-            }
-        }
-        private bool? GetOptionSetting(char option)
-        {
-            if (_optionsSetOff.IndexOf(option) >= 0)
-                return false;
-            if (_optionsSetOn.IndexOf(option) >= 0)
-                return true;
-            return null;
-        }
-        public bool IsOptionOff(char option)
-        {
-            ValidateOption(option);
-            return !GetOptionSetting(option) ?? !GetOptionDefault(option) ?? false;
-        }
-        public bool IsOptionOn(char option)
-        {
-            ValidateOption(option);
-            return GetOptionSetting(option) ?? GetOptionDefault(option) ?? false;
-        }
-        private void ValidateOption(char option)
-        {
-            if (!char.IsUpper(option))
-                throw new ArgumentOutOfRangeException("Option must be specified as an uppercase letter");
-        }
-    }
+		private bool? GetOptionDefault(char option) {
+			switch(option) {
+			case 'B': return false;
+			case 'C': return true;
+			case 'D': return true;
+			case 'E': return false;
+			case 'F': return false;
+			case 'G': return true;
+			case 'H': return true;
+			case 'I': return true;
+			case 'J': return false;
+			case 'K': return false;
+			case 'L': return true;
+			case 'M': return false;
+			case 'N': return true;
+			case 'O': return true;
+			case 'P': return true;
+			case 'Q': return false;
+			case 'R': return false;
+			case 'S': return false;
+			case 'T': return false;
+			case 'U': return false;
+			case 'V': return true;
+			case 'W': return false;
+			case 'X': return true;
+			case 'Y': return true;
+			case 'Z': return false;
+			default: return null;
+			}
+		}
+		private bool? GetOptionSetting(char option) {
+			if(_optionsSetOff.IndexOf(option) >= 0)
+				return false;
+			if(_optionsSetOn.IndexOf(option) >= 0)
+				return true;
+			return null;
+		}
+		public bool IsOptionOff(char option) {
+			ValidateOption(option);
+			return !GetOptionSetting(option) ?? !GetOptionDefault(option) ?? false;
+		}
+		public bool IsOptionOn(char option) {
+			ValidateOption(option);
+			return GetOptionSetting(option) ?? GetOptionDefault(option) ?? false;
+		}
+		private void ValidateOption(char option) {
+			if(!char.IsUpper(option))
+				throw new ArgumentOutOfRangeException("Option must be specified as an uppercase letter");
+		}
+	}
 }

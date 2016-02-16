@@ -22,32 +22,26 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DGrok.Framework
-{
-    public class Lexer
-    {
-        private string _fileName;
-        private string _source;
+namespace DGrok.Framework {
+	public class Lexer {
+		private string _fileName;
+		private string _source;
 
-        public Lexer(string source, string fileName)
-        {
-            _source = source;
-            _fileName = fileName;
-        }
+		public Lexer(string source, string fileName) {
+			_source = source;
+			_fileName = fileName;
+		}
 
-        public IEnumerable<Token> Tokens
-        {
-            get
-            {
-                LexScanner scanner = new LexScanner(_source, _fileName);
-                for (; ; )
-                {
-                    Token token = scanner.NextToken();
-                    if (token == null)
-                        yield break;
-                    yield return token;
-                }
-            }
-        }
-    }
+		public IEnumerable<Token> Tokens {
+			get {
+				LexScanner scanner = new LexScanner(_source, _fileName);
+				for(;;) {
+					Token token = scanner.NextToken();
+					if(token == null)
+						yield break;
+					yield return token;
+				}
+			}
+		}
+	}
 }
