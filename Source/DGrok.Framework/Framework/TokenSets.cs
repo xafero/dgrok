@@ -344,6 +344,8 @@ namespace DGrok.Framework {
 			Expression = new TokenSet("expression");
 			Expression.AddRange(Particle);
 			Expression.AddRange(UnaryOperator);
+			Expression.Add(TokenType.FunctionKeyword);
+			Expression.Add(TokenType.ProcedureKeyword);
 
 			ExtendedIdent = new TokenSet("identifier (including keyword)");
 			ExtendedIdent.AddRange(Ident);

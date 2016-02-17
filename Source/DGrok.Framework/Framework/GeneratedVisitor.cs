@@ -503,5 +503,18 @@ namespace DGrok.Framework {
 			Visit(node.DoKeywordNode);
 			Visit(node.StatementNode);
 		}
+
+		internal void VisitGotoStatementNode(GenericIdentifierNode node) {
+			Visit(node.IdentifierNode);
+			Visit(node.GenericOpen);
+			Visit(node.TypeListNode);
+			Visit(node.GenericClose);
+		}
+
+		internal void VisitGotoStatementNode(GenericConstraintsNode node) {
+			Visit(node.IdentifierListNode);
+			Visit(node.ColonNode);
+			Visit(node.ConstraintListNode);
+		}
 	}
 }

@@ -122,5 +122,10 @@ namespace DGrok.Framework {
 		VisibilitySectionContent,
 		WhileStatement,
 		WithStatement,
+		TypeGenericDecl,
+		AnonMethodImplementation,
+		AnonMethodHeading,
+		TypeGeneric,
+		TypeGenericParameter,
 	}
 }

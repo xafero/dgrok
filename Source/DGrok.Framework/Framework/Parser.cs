@@ -41,6 +41,39 @@ namespace DGrok.Framework {
 			#region AddOp
 			AddTokenRule(RuleType.AddOp, TokenSets.AddOp);
 			#endregion
+			#region AnonMethodHeading
+			AddRule(RuleType.AnonMethodHeading, TokenSets.MethodType.LookAhead, delegate {
+				Token methodType = ParseToken(TokenSets.MethodType);
+
+				Token openParenthesis = null;
+				ListNode<DelimitedItemNode<ParameterNode>> parameterList =
+					CreateEmptyListNode<DelimitedItemNode<ParameterNode>>();
+				Token closeParenthesis = null;
+				if(CanParseToken(TokenType.OpenParenthesis)) {
+					openParenthesis = ParseToken(TokenType.OpenParenthesis);
+					if(CanParseRule(RuleType.Parameter)) {
+						parameterList = ParseDelimitedList<ParameterNode>(
+							RuleType.Parameter, TokenType.Semicolon);
+					}
+					closeParenthesis = ParseToken(TokenType.CloseParenthesis);
+				}
+				Token colon = null;
+				AstNode returnType = null;
+				if(CanParseToken(TokenType.Colon)) {
+					colon = ParseToken(TokenType.Colon);
+					returnType = ParseRuleInternal(RuleType.MethodReturnType);
+				}
+
+				return new AnonMethodHeadingNode(methodType, openParenthesis, parameterList, closeParenthesis, colon, returnType);
+			});
+			#endregion
+			#region AnonMethodImplementation
+			AddRule(RuleType.AnonMethodImplementation, CanParseRule(RuleType.AnonMethodHeading), delegate {
+				var anonMethodHeading = (AnonMethodHeadingNode)ParseRuleInternal(RuleType.AnonMethodHeading);
+				var fancyBlock = (FancyBlockNode)ParseRuleInternal(RuleType.FancyBlock);
+				return new AnonMethodImplementationNode(anonMethodHeading, fancyBlock);
+			});
+			#endregion
 			#region ArrayType
 			AddRule(RuleType.ArrayType, LookAhead(TokenType.ArrayKeyword), delegate {
 				Token array = ParseToken(TokenType.ArrayKeyword);
@@ -87,23 +120,27 @@ namespace DGrok.Framework {
 						Token dot = ParseToken(TokenType.Dot);
 						AstNode right = ParseRuleInternal(RuleType.ExtendedIdent);
 						node = new BinaryOperationNode(node, dot, right);
+
 					} else if(CanParseToken(TokenType.Caret)) {
 						Token caret = ParseToken(TokenType.Caret);
 						node = new PointerDereferenceNode(node, caret);
+
 					} else if(CanParseToken(TokenType.OpenBracket)) {
 						Token openDelimiter = ParseToken(TokenType.OpenBracket);
 						ListNode<DelimitedItemNode<AstNode>> parameterList =
 							(ListNode<DelimitedItemNode<AstNode>>)ParseRuleInternal(RuleType.ExpressionList);
 						Token closeDelimiter = ParseToken(TokenType.CloseBracket);
 						node = new ParameterizedNode(node, openDelimiter, parameterList, closeDelimiter);
+
 					} else if(CanParseToken(TokenType.OpenParenthesis)) {
 						Token openDelimiter = ParseToken(TokenType.OpenParenthesis);
 						ListNode<DelimitedItemNode<AstNode>> parameterList;
 						if(CanParseRule(RuleType.ExpressionList)) {
 							parameterList =
 								ParseDelimitedList<AstNode>(RuleType.ParameterExpression, TokenType.Comma);
-						} else
-							parameterList = CreateEmptyListNode<DelimitedItemNode<AstNode>>();
+
+						} else parameterList = CreateEmptyListNode<DelimitedItemNode<AstNode>>();
+
 						Token closeDelimiter = ParseToken(TokenType.CloseParenthesis);
 						node = new ParameterizedNode(node, openDelimiter, parameterList, closeDelimiter);
 					} else
@@ -215,6 +252,7 @@ namespace DGrok.Framework {
 					inheritanceList = ParseDelimitedList<AstNode>(RuleType.QualifiedIdent, TokenType.Comma);
 					closeParenthesis = ParseToken(TokenType.CloseParenthesis);
 				}
+
 				ListNode<VisibilitySectionNode> contents = CreateEmptyListNode<VisibilitySectionNode>();
 				Token end = null;
 				if(!CanParseToken(TokenType.Semicolon)) {
@@ -350,12 +388,19 @@ namespace DGrok.Framework {
 			#endregion
 			#region Expression
 			AddRule(RuleType.Expression, TokenSets.Expression.LookAhead, delegate {
-				AstNode node = ParseRuleInternal(RuleType.SimpleExpression);
-				while(CanParseRule(RuleType.RelOp)) {
-					Token theOperator = (Token)ParseRuleInternal(RuleType.RelOp);
-					AstNode right = ParseRuleInternal(RuleType.SimpleExpression);
-					node = new BinaryOperationNode(node, theOperator, right);
+				AstNode node;
+
+				if(Peek(0) == TokenType.ProcedureKeyword || Peek(0) == TokenType.FunctionKeyword) {
+					node = ParseRuleInternal(RuleType.MethodImplementation);
+				} else {
+					node = ParseRuleInternal(RuleType.SimpleExpression);
+					while(CanParseRule(RuleType.RelOp)) {
+						Token theOperator = (Token)ParseRuleInternal(RuleType.RelOp);
+						AstNode right = ParseRuleInternal(RuleType.SimpleExpression);
+						node = new BinaryOperationNode(node, theOperator, right);
+					}
 				}
+
 				return node;
 			});
 			#endregion
@@ -664,7 +709,21 @@ namespace DGrok.Framework {
 				if(CanParseToken(TokenType.ClassKeyword))
 					theClass = ParseToken(TokenType.ClassKeyword);
 				Token methodType = ParseToken(TokenSets.MethodType);
+
 				AstNode name = ParseRuleInternal(RuleType.QualifiedIdent);
+
+				if(Peek(0) == TokenType.LessThan) {
+					var open = ParseToken(TokenType.LessThan);
+
+					var genericTypes = ParseDelimitedList<GenericConstraintsNode>(RuleType.TypeGenericDecl, TokenType.Comma);
+					var close = ParseToken(TokenType.GreaterThan);
+
+					//TODO
+					//node = new GenericIdentifierNode((Token)node, open, genericTypes, close);
+				}
+
+
+
 				if(CanParseToken(TokenType.EqualSign)) {
 					AstNode interfaceMethod = name;
 					Token equalSign = ParseToken(TokenType.EqualSign);
@@ -710,7 +769,7 @@ namespace DGrok.Framework {
 					return methodHeading;
 				else {
 					FancyBlockNode fancyBlock = (FancyBlockNode)ParseRuleInternal(RuleType.FancyBlock);
-					Token semicolon = ParseToken(TokenType.Semicolon);
+					Token semicolon = TryParseToken(TokenType.Semicolon);
 					return new MethodImplementationNode(methodHeading, fancyBlock, semicolon);
 				}
 			});
@@ -799,6 +858,8 @@ namespace DGrok.Framework {
 				return CanParseRule(RuleType.Expression);
 			}, delegate {
 				AstNode node = ParseRuleInternal(RuleType.Expression);
+
+
 				if(CanParseToken(TokenType.Colon)) {
 					Token sizeColon = ParseToken(TokenType.Colon);
 					AstNode size = ParseRuleInternal(RuleType.Expression);
@@ -838,7 +899,7 @@ namespace DGrok.Framework {
 			particleAlternator.AddToken(TokenType.Number);
 			particleAlternator.AddToken(TokenType.StringKeyword);
 			particleAlternator.AddToken(TokenType.StringLiteral);
-			particleAlternator.AddRule(RuleType.Ident);
+			particleAlternator.AddRule(RuleType.QualifiedIdent);
 			particleAlternator.AddRule(RuleType.ParenthesizedExpression);
 			particleAlternator.AddRule(RuleType.SetLiteral);
 			AddRule(RuleType.Particle, TokenSets.Particle.LookAhead, delegate {
@@ -976,15 +1037,31 @@ namespace DGrok.Framework {
 			#endregion
 			#region QualifiedIdent
 			AddRule(RuleType.QualifiedIdent, TokenSets.Ident.LookAhead, delegate {
-				AstNode node = ParseIdent();
+				AstNode node;
+				var location = PeekLocation(0);
+				if(location.FileSource[location.Offset] == '<') {
+					node = ParseRule(RuleType.TypeGeneric);
+				} else {
+					node = ParseRuleInternal(RuleType.Ident);
+				}
+
 				while(CanParseToken(TokenType.Dot)) {
 					Token dot = ParseToken(TokenType.Dot);
-					AstNode right = ParseRuleInternal(RuleType.ExtendedIdent);
+
+					AstNode right; 
+					location = PeekLocation(0);
+					if(location.FileSource[location.Offset] == '<') {
+						right = ParseRule(RuleType.TypeGeneric);
+					} else {
+						right = ParseRuleInternal(RuleType.ExtendedIdent);
+					}
+
 					node = new BinaryOperationNode(node, dot, right);
 				}
 				return node;
 			});
 			#endregion
+
 			#region RaiseStatement
 			AddRule(RuleType.RaiseStatement, LookAhead(TokenType.RaiseKeyword), delegate {
 				Token raise = ParseToken(TokenType.RaiseKeyword);
@@ -1207,12 +1284,12 @@ namespace DGrok.Framework {
 			typeAlternator.AddRule(RuleType.ClassHelperType);
 			typeAlternator.AddRule(RuleType.ClassOfType);
 			typeAlternator.AddRule(RuleType.ClassType);
+			typeAlternator.AddRule(RuleType.ProcedureType);
 			typeAlternator.AddRule(RuleType.EnumeratedType);
 			typeAlternator.AddRule(RuleType.ExpressionOrRange);
 			typeAlternator.AddRule(RuleType.InterfaceType);
 			typeAlternator.AddRule(RuleType.PackedType);
 			typeAlternator.AddRule(RuleType.PointerType);
-			typeAlternator.AddRule(RuleType.ProcedureType);
 			typeAlternator.AddRule(RuleType.RecordHelperType);
 			typeAlternator.AddRule(RuleType.RecordType);
 			typeAlternator.AddRule(RuleType.SetType);
@@ -1250,6 +1327,17 @@ namespace DGrok.Framework {
 			#region TypeDecl
 			AddRule(RuleType.TypeDecl, TokenSets.Ident.LookAhead, delegate {
 				Token name = ParseIdent();
+
+				if(CanParseToken(TokenType.LessThan)) {
+					var open = ParseToken(TokenType.LessThan);
+
+					var genericTypes = ParseDelimitedList<GenericConstraintsNode>(RuleType.TypeGenericDecl, TokenType.Comma);
+					var close = ParseToken(TokenType.GreaterThan);
+
+					//node = new GenericIdentifierNode((Token)node, open, genericTypes, close); //TODO
+				}
+
+
 				Token equalSign = ParseToken(TokenType.EqualSign);
 				if(TokenSets.ForwardableType.Contains(Peek(0)) && Peek(1) == TokenType.Semicolon) {
 					Token type = ParseToken(TokenSets.ForwardableType);
@@ -1273,6 +1361,76 @@ namespace DGrok.Framework {
 				return new TypeSectionNode(type, typeList);
 			});
 			#endregion
+			#region TypeGenericParameters
+			AddRule(RuleType.TypeGenericParameter,
+				parser => Peek(0) == TokenType.StringKeyword || CanParseToken(TokenSets.Ident),
+				delegate {
+					AstNode genericParameter;
+					if(CanParseRule(RuleType.TypeGeneric)) {
+						genericParameter = ParseRule(RuleType.TypeGeneric);
+
+					} else if(Peek(0) == TokenType.StringKeyword) {
+						genericParameter = ParseToken(TokenType.StringKeyword);
+
+					} else {
+						genericParameter = ParseToken(TokenSets.Ident);
+					}
+
+					return genericParameter;
+				}
+			);
+			#endregion
+			#region TypeGeneric
+			AddRule(RuleType.TypeGeneric,
+				parser => Peek(0) == TokenType.Identifier && Peek(1) == TokenType.LessThan,
+				delegate {
+					var typeIdentifier = ParseToken(TokenType.Identifier);
+					var openParanthesis = ParseToken(TokenType.LessThan);
+					var genericParameters = ParseDelimitedList<AstNode>(RuleType.TypeGenericParameter, TokenType.Comma);
+					var closeParanthesis = ParseToken(TokenType.GreaterThan);
+
+					return new TypeGenericNode(typeIdentifier, openParanthesis, genericParameters, closeParanthesis);
+				}
+			);
+			#endregion
+			#region TypeGenericDecl
+			AddRule(RuleType.TypeGenericDecl, TokenSets.ExtendedIdent.LookAhead, delegate {
+				ListNode<DelimitedItemNode<AstNode>> genericType;
+				if(CanParseToken(TokenType.StringKeyword)) { //TODO
+					genericType = new ListNode<DelimitedItemNode<AstNode>>(new[] {
+						new DelimitedItemNode<AstNode>(ParseToken(TokenType.StringKeyword), null)
+					});
+				} else if(CanParseToken(TokenType.ConstructorKeyword)) { //TODO
+					genericType = new ListNode<DelimitedItemNode<AstNode>>(new[] {
+						new DelimitedItemNode<AstNode>(ParseToken(TokenType.ConstructorKeyword), null)
+					});
+				} else {
+					genericType = ParseDelimitedList<AstNode>(RuleType.QualifiedIdent, TokenType.Semicolon); //TODO
+				}
+
+				var theColon = TryParseToken(TokenType.Colon);
+
+				ListNode<DelimitedItemNode<AstNode>> constraints = null;
+				if(theColon != null) {
+					//TODO
+
+					if(CanParseToken(TokenType.StringKeyword)) {
+						constraints = new ListNode<DelimitedItemNode<AstNode>>(new[] {
+							new DelimitedItemNode<AstNode>(ParseToken(TokenType.StringKeyword), null)
+						});
+					} else if(CanParseToken(TokenType.ClassKeyword)) {
+						constraints = new ListNode<DelimitedItemNode<AstNode>>(new[] {
+							new DelimitedItemNode<AstNode>(ParseToken(TokenType.ClassKeyword), null)
+						});
+					} else {
+						constraints = ParseDelimitedList<AstNode>(RuleType.QualifiedIdent, TokenType.Semicolon);
+					}
+				}
+
+				return new GenericConstraintsNode(genericType, theColon, constraints);
+			});
+			#endregion
+
 			#region UnaryOperator
 			AddTokenRule(RuleType.UnaryOperator, TokenSets.UnaryOperator);
 			#endregion
@@ -1571,6 +1729,14 @@ namespace DGrok.Framework {
 				--offset;
 			}
 			return frame.TokenType;
+		}
+		private Location PeekLocation(int offset) {
+			IFrame frame = _nextFrame;
+			while(offset > 0) {
+				frame = frame.Next;
+				--offset;
+			}
+			return frame.Location;
 		}
 		private Token TryParseToken(TokenType tokenType) {
 			if(CanParseToken(tokenType))

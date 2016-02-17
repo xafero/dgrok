@@ -133,6 +133,7 @@ namespace DGrok.Framework {
 			_directiveTypes["HPPEMIT"] = DirectiveType.Ignored;
 			_directiveTypes["NODEFINE"] = DirectiveType.Ignored;
 			_directiveTypes["NOINCLUDE"] = DirectiveType.Ignored;
+			_directiveTypes["ZEROBASEDSTRINGS"] = DirectiveType.Ignored;
 		}
 
 		public IEnumerable<Token> Tokens {

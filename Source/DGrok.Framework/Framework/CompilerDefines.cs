@@ -46,6 +46,7 @@ namespace DGrok.Framework {
 			//  - http://www.blong.com/Tips/KylixTips.htm#Conditionals
 
 			defines.DefineSymbol("CONDITIONALEXPRESSIONS");
+			defines.DefineSymbol("ZEROBASEDSTRINGS");
 			defines.DefineSymbol("CPU386");
 			defines.DefineSymbol("MSWINDOWS");
 			defines.DefineSymbol("WIN32");
@@ -113,8 +114,7 @@ namespace DGrok.Framework {
 			DefineDirective(compilerDirective, true);
 		}
 		public void DefineSymbol(string symbol) {
-			if(String.IsNullOrEmpty(symbol))
-				return;
+			if(String.IsNullOrEmpty(symbol)) return;
 			DefineDirectiveAsTrue("IFDEF " + symbol);
 			DefineDirectiveAsTrue("IF Defined(" + symbol + ")");
 			DefineDirectiveAsFalse("IFNDEF " + symbol);

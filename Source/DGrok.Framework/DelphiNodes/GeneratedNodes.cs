@@ -42,39 +42,21 @@ namespace DGrok.DelphiNodes {
 			_typeNode = typeNode;
 		}
 
-		public Token ArrayKeywordNode {
-			get { return _arrayKeywordNode; }
-		}
-		public Token CloseBracketNode {
-			get { return _closeBracketNode; }
-		}
-		public ListNode<DelimitedItemNode<AstNode>> IndexListNode {
-			get { return _indexListNode; }
-		}
-		public Token OfKeywordNode {
-			get { return _ofKeywordNode; }
-		}
-		public Token OpenBracketNode {
-			get { return _openBracketNode; }
-		}
-		public AstNode TypeNode {
-			get { return _typeNode; }
-		}
+		public Token ArrayKeywordNode { get { return _arrayKeywordNode; } }
+		public Token CloseBracketNode { get { return _closeBracketNode; } }
+		public ListNode<DelimitedItemNode<AstNode>> IndexListNode { get { return _indexListNode; } }
+		public Token OfKeywordNode { get { return _ofKeywordNode; } }
+		public Token OpenBracketNode { get { return _openBracketNode; } }
+		public AstNode TypeNode { get { return _typeNode; } }
 
 		public override IEnumerable<AstNode> ChildNodes {
 			get {
-				if(ArrayKeywordNode != null)
-					yield return ArrayKeywordNode;
-				if(OpenBracketNode != null)
-					yield return OpenBracketNode;
-				if(IndexListNode != null)
-					yield return IndexListNode;
-				if(CloseBracketNode != null)
-					yield return CloseBracketNode;
-				if(OfKeywordNode != null)
-					yield return OfKeywordNode;
-				if(TypeNode != null)
-					yield return TypeNode;
+				if(ArrayKeywordNode != null) yield return ArrayKeywordNode;
+				if(OpenBracketNode != null) yield return OpenBracketNode;
+				if(IndexListNode != null) yield return IndexListNode;
+				if(CloseBracketNode != null) yield return CloseBracketNode;
+				if(OfKeywordNode != null) yield return OfKeywordNode;
+				if(TypeNode != null) yield return TypeNode;
 			}
 		}
 		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
@@ -88,9 +70,7 @@ namespace DGrok.DelphiNodes {
 			}
 		}
 
-		public override void Accept(Visitor visitor) {
-			visitor.VisitArrayTypeNode(this);
-		}
+		public override void Accept(Visitor visitor) { visitor.VisitArrayTypeNode(this); }
 	}
 	public partial class AssemblerStatementNode : NonterminalNode {
 		private Token _asmKeywordNode;
@@ -101,19 +81,13 @@ namespace DGrok.DelphiNodes {
 			_endKeywordNode = endKeywordNode;
 		}
 
-		public Token AsmKeywordNode {
-			get { return _asmKeywordNode; }
-		}
-		public Token EndKeywordNode {
-			get { return _endKeywordNode; }
-		}
+		public Token AsmKeywordNode { get { return _asmKeywordNode; } }
+		public Token EndKeywordNode { get { return _endKeywordNode; } }
 
 		public override IEnumerable<AstNode> ChildNodes {
 			get {
-				if(AsmKeywordNode != null)
-					yield return AsmKeywordNode;
-				if(EndKeywordNode != null)
-					yield return EndKeywordNode;
+				if(AsmKeywordNode != null) yield return AsmKeywordNode;
+				if(EndKeywordNode != null) yield return EndKeywordNode;
 			}
 		}
 		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
@@ -142,34 +116,19 @@ namespace DGrok.DelphiNodes {
 			_closeBracketNode = closeBracketNode;
 		}
 
-		public Token CloseBracketNode {
-			get { return _closeBracketNode; }
-		}
-		public Token ColonNode {
-			get { return _colonNode; }
-		}
-		public Token OpenBracketNode {
-			get { return _openBracketNode; }
-		}
-		public Token ScopeNode {
-			get { return _scopeNode; }
-		}
-		public AstNode ValueNode {
-			get { return _valueNode; }
-		}
+		public Token CloseBracketNode { get { return _closeBracketNode; } }
+		public Token ColonNode { get { return _colonNode; } }
+		public Token OpenBracketNode { get { return _openBracketNode; } }
+		public Token ScopeNode { get { return _scopeNode; } }
+		public AstNode ValueNode { get { return _valueNode; } }
 
 		public override IEnumerable<AstNode> ChildNodes {
 			get {
-				if(OpenBracketNode != null)
-					yield return OpenBracketNode;
-				if(ScopeNode != null)
-					yield return ScopeNode;
-				if(ColonNode != null)
-					yield return ColonNode;
-				if(ValueNode != null)
-					yield return ValueNode;
-				if(CloseBracketNode != null)
-					yield return CloseBracketNode;
+				if(OpenBracketNode != null) yield return OpenBracketNode;
+				if(ScopeNode != null) yield return ScopeNode;
+				if(ColonNode != null) yield return ColonNode;
+				if(ValueNode != null) yield return ValueNode;
+				if(CloseBracketNode != null) yield return CloseBracketNode;
 			}
 		}
 		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
@@ -182,9 +141,7 @@ namespace DGrok.DelphiNodes {
 			}
 		}
 
-		public override void Accept(Visitor visitor) {
-			visitor.VisitAttributeNode(this);
-		}
+		public override void Accept(Visitor visitor) { visitor.VisitAttributeNode(this); }
 	}
 	public partial class BinaryOperationNode : NonterminalNode {
 		private AstNode _leftNode;
@@ -197,24 +154,15 @@ namespace DGrok.DelphiNodes {
 			_rightNode = rightNode;
 		}
 
-		public AstNode LeftNode {
-			get { return _leftNode; }
-		}
-		public Token OperatorNode {
-			get { return _operatorNode; }
-		}
-		public AstNode RightNode {
-			get { return _rightNode; }
-		}
+		public AstNode LeftNode { get { return _leftNode; } }
+		public Token OperatorNode { get { return _operatorNode; } }
+		public AstNode RightNode { get { return _rightNode; } }
 
 		public override IEnumerable<AstNode> ChildNodes {
 			get {
-				if(LeftNode != null)
-					yield return LeftNode;
-				if(OperatorNode != null)
-					yield return OperatorNode;
-				if(RightNode != null)
-					yield return RightNode;
+				if(LeftNode != null) yield return LeftNode;
+				if(OperatorNode != null) yield return OperatorNode;
+				if(RightNode != null) yield return RightNode;
 			}
 		}
 		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
@@ -240,24 +188,15 @@ namespace DGrok.DelphiNodes {
 			_endKeywordNode = endKeywordNode;
 		}
 
-		public Token BeginKeywordNode {
-			get { return _beginKeywordNode; }
-		}
-		public Token EndKeywordNode {
-			get { return _endKeywordNode; }
-		}
-		public ListNode<DelimitedItemNode<AstNode>> StatementListNode {
-			get { return _statementListNode; }
-		}
+		public Token BeginKeywordNode { get { return _beginKeywordNode; } }
+		public Token EndKeywordNode { get { return _endKeywordNode; } }
+		public ListNode<DelimitedItemNode<AstNode>> StatementListNode { get { return _statementListNode; } }
 
 		public override IEnumerable<AstNode> ChildNodes {
 			get {
-				if(BeginKeywordNode != null)
-					yield return BeginKeywordNode;
-				if(StatementListNode != null)
-					yield return StatementListNode;
-				if(EndKeywordNode != null)
-					yield return EndKeywordNode;
+				if(BeginKeywordNode != null) yield return BeginKeywordNode;
+				if(StatementListNode != null) yield return StatementListNode;
+				if(EndKeywordNode != null) yield return EndKeywordNode;
 			}
 		}
 		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
@@ -268,9 +207,7 @@ namespace DGrok.DelphiNodes {
 			}
 		}
 
-		public override void Accept(Visitor visitor) {
-			visitor.VisitBlockNode(this);
-		}
+		public override void Accept(Visitor visitor) { visitor.VisitBlockNode(this); }
 	}
 	public partial class CaseSelectorNode : NonterminalNode {
 		private Token _colonNode;
@@ -285,29 +222,17 @@ namespace DGrok.DelphiNodes {
 			_semicolonNode = semicolonNode;
 		}
 
-		public Token ColonNode {
-			get { return _colonNode; }
-		}
-		public Token SemicolonNode {
-			get { return _semicolonNode; }
-		}
-		public AstNode StatementNode {
-			get { return _statementNode; }
-		}
-		public ListNode<DelimitedItemNode<AstNode>> ValueListNode {
-			get { return _valueListNode; }
-		}
+		public Token ColonNode { get { return _colonNode; } }
+		public Token SemicolonNode { get { return _semicolonNode; } }
+		public AstNode StatementNode { get { return _statementNode; } }
+		public ListNode<DelimitedItemNode<AstNode>> ValueListNode { get { return _valueListNode; } }
 
 		public override IEnumerable<AstNode> ChildNodes {
 			get {
-				if(ValueListNode != null)
-					yield return ValueListNode;
-				if(ColonNode != null)
-					yield return ColonNode;
-				if(StatementNode != null)
-					yield return StatementNode;
-				if(SemicolonNode != null)
-					yield return SemicolonNode;
+				if(ValueListNode != null) yield return ValueListNode;
+				if(ColonNode != null) yield return ColonNode;
+				if(StatementNode != null) yield return StatementNode;
+				if(SemicolonNode != null) yield return SemicolonNode;
 			}
 		}
 		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
@@ -319,9 +244,7 @@ namespace DGrok.DelphiNodes {
 			}
 		}
 
-		public override void Accept(Visitor visitor) {
-			visitor.VisitCaseSelectorNode(this);
-		}
+		public override void Accept(Visitor visitor) { visitor.VisitCaseSelectorNode(this); }
 	}
 	public partial class CaseStatementNode : NonterminalNode {
 		private Token _caseKeywordNode;
@@ -342,27 +265,13 @@ namespace DGrok.DelphiNodes {
 			_endKeywordNode = endKeywordNode;
 		}
 
-		public Token CaseKeywordNode {
-			get { return _caseKeywordNode; }
-		}
-		public Token ElseKeywordNode {
-			get { return _elseKeywordNode; }
-		}
-		public ListNode<DelimitedItemNode<AstNode>> ElseStatementListNode {
-			get { return _elseStatementListNode; }
-		}
-		public Token EndKeywordNode {
-			get { return _endKeywordNode; }
-		}
-		public AstNode ExpressionNode {
-			get { return _expressionNode; }
-		}
-		public Token OfKeywordNode {
-			get { return _ofKeywordNode; }
-		}
-		public ListNode<CaseSelectorNode> SelectorListNode {
-			get { return _selectorListNode; }
-		}
+		public Token CaseKeywordNode { get { return _caseKeywordNode; } }
+		public Token ElseKeywordNode { get { return _elseKeywordNode; } }
+		public ListNode<DelimitedItemNode<AstNode>> ElseStatementListNode { get { return _elseStatementListNode; } }
+		public Token EndKeywordNode { get { return _endKeywordNode; } }
+		public AstNode ExpressionNode { get { return _expressionNode; } }
+		public Token OfKeywordNode { get { return _ofKeywordNode; } }
+		public ListNode<CaseSelectorNode> SelectorListNode { get { return _selectorListNode; } }
 
 		public override IEnumerable<AstNode> ChildNodes {
 			get {
@@ -1323,6 +1232,80 @@ namespace DGrok.DelphiNodes {
 		public override void Accept(Visitor visitor) {
 			visitor.VisitForStatementNode(this);
 		}
+	}
+
+	public partial class GenericConstraintsNode : NonterminalNode {
+		private ListNode<DelimitedItemNode<AstNode>> _identifierListNode;
+		public ListNode<DelimitedItemNode<AstNode>> IdentifierListNode { get { return _identifierListNode; } }
+
+		private Token _colonNode;
+		public Token ColonNode { get { return _colonNode; } }
+
+		private ListNode<DelimitedItemNode<AstNode>> _constraintListNode;
+		public ListNode<DelimitedItemNode<AstNode>> ConstraintListNode { get { return _constraintListNode; } }
+
+		public GenericConstraintsNode(ListNode<DelimitedItemNode<AstNode>> identifierListNode, Token colonNode, ListNode<DelimitedItemNode<AstNode>> constraintListNode) {
+			_identifierListNode = identifierListNode;
+			_colonNode = colonNode;
+			_constraintListNode = constraintListNode;
+		}
+
+		public override IEnumerable<AstNode> ChildNodes {
+			get {
+				if(IdentifierListNode != null) yield return IdentifierListNode;
+				if(ColonNode != null) yield return ColonNode;
+				if(ConstraintListNode != null) yield return ConstraintListNode;
+			}
+		}
+		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
+			get {
+				yield return new KeyValuePair<string, AstNode>("IdentifierListNode", IdentifierListNode);
+				yield return new KeyValuePair<string, AstNode>("ColonNode", ColonNode);
+				yield return new KeyValuePair<string, AstNode>("ConstraintListNode", ConstraintListNode);
+			}
+		}
+
+		public override void Accept(Visitor visitor) { visitor.VisitGotoStatementNode(this); }
+	}
+
+	public partial class GenericIdentifierNode : NonterminalNode {
+		private Token _identifierNode;
+		public Token IdentifierNode { get { return _identifierNode; } }
+
+		private Token _genericOpen;
+		public Token GenericOpen { get { return _genericOpen; } }
+
+		private ListNode<DelimitedItemNode<GenericConstraintsNode>> _typeListNode;
+		public ListNode<DelimitedItemNode<GenericConstraintsNode>> TypeListNode { get { return _typeListNode; } }
+
+		private Token _genericClose;
+		public Token GenericClose { get { return _genericClose; } }
+
+		public GenericIdentifierNode(Token identifierNode, Token genericOpen, ListNode<DelimitedItemNode<GenericConstraintsNode>> typeListNode, Token genericClose) {
+			_identifierNode = identifierNode;
+			_genericOpen = genericOpen;
+			_typeListNode = typeListNode;
+			_genericClose = genericClose;
+		}
+
+		public override IEnumerable<AstNode> ChildNodes {
+			get {
+				if(IdentifierNode != null) yield return IdentifierNode;
+				if(GenericOpen != null) yield return GenericOpen;
+				if(TypeListNode != null) yield return TypeListNode;
+				if(GenericClose != null) yield return GenericClose;
+			}
+		}
+		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
+			get {
+				yield return new KeyValuePair<string, AstNode>("IdentifierNode", IdentifierNode);
+				yield return new KeyValuePair<string, AstNode>("GenericOpen", GenericOpen);
+				yield return new KeyValuePair<string, AstNode>("TypeListNode", TypeListNode);
+				yield return new KeyValuePair<string, AstNode>("GenericClose", GenericClose);
+			}
+		}
+
+		public override void Accept(Visitor visitor) { visitor.VisitGotoStatementNode(this); }
 	}
 	public partial class GotoStatementNode : NonterminalNode {
 		private Token _gotoKeywordNode;
