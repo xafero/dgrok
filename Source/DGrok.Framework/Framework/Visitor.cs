@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using DGrok.DelphiNodes;
 
 namespace DGrok.Framework {
 	public partial class Visitor : ICodeBaseAction {
@@ -55,7 +56,10 @@ namespace DGrok.Framework {
 		public virtual void VisitSourceFile(string fileName, AstNode node) {
 			Visit(node);
 		}
+
+
 		public virtual void VisitToken(Token token) {
 		}
+
 	}
 }

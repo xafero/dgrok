@@ -127,5 +127,7 @@ namespace DGrok.Framework {
 		AnonMethodHeading,
 		TypeGeneric,
 		TypeGenericParameter,
+		DfmObjectData,
+		DfmPropertyData,
 	}
 }

@@ -34,6 +34,7 @@ namespace DGrok.Framework {
 		public static TokenSet ForDirection { get; }
 		public static TokenSet ForwardableType { get; }
 		public static TokenSet Ident { get; }
+		public static TokenSet IdentNoVisibility { get; }
 		public static TokenSet InitSection { get; }
 		public static TokenSet InterfaceType { get; }
 		public static TokenSet Keyword { get; }
@@ -328,6 +329,11 @@ namespace DGrok.Framework {
 			Ident = new TokenSet("identifier");
 			Ident.Add(TokenType.Identifier);
 			Ident.AddRange(Semikeyword);
+
+			IdentNoVisibility = new TokenSet("identifier no visibility");
+			IdentNoVisibility.AddRange(Ident);
+			IdentNoVisibility.RemoveRange(VisibilitySingleWord);
+			IdentNoVisibility.Remove(TokenType.StrictSemikeyword);
 
 			Directive.AddRange(PortabilityDirective);
 

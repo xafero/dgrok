@@ -84,6 +84,26 @@ namespace DGrok.Framework {
 			Visit(node.ContentListNode);
 			Visit(node.EndKeywordNode);
 		}
+		internal void VisitAnonMethodImplementationNode(AnonMethodImplementationNode node) {
+			Visit(node.AnonMethodHeading);
+			Visit(node.FancyBlock);
+		}
+		internal void VisitTypeGenericNode(TypeGenericNode node) {
+			Visit(node.TypeIdentifier);
+			Visit(node.OpenParanthesis);
+			Visit(node.GenericParameters);
+			Visit(node.CloseParanthesis);
+		}
+
+		internal void VisitAnonMethodHeadingNode(AnonMethodHeadingNode node) {
+			Visit(node.MethodType);
+			Visit(node.OpenParenthesis);
+			Visit(node.ParameterList);
+			Visit(node.CloseParenthesis);
+			Visit(node.Colon);
+			Visit(node.ReturnType);
+		}
+
 		public virtual void VisitConstantDeclNode(ConstantDeclNode node) {
 			Visit(node.NameNode);
 			Visit(node.ColonNode);

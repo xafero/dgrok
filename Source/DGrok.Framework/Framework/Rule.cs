@@ -35,12 +35,9 @@ namespace DGrok.Framework {
 			_evaluate = evaluate;
 		}
 
-		public bool CanParse() {
-			return _lookAhead(_parser);
-		}
+		public bool CanParse() { return _lookAhead(_parser); }
 		public AstNode Execute() {
-			if(!CanParse())
-				throw _parser.Failure(_ruleType.ToString());
+			if(!CanParse()) throw _parser.Failure(_ruleType.ToString());
 			return _evaluate();
 		}
 	}

@@ -26,6 +26,7 @@ namespace DGrok.Framework {
 		string DisplayName { get; }
 		bool IsEof { get; }
 		Location Location { get; }
+		Location EndLocation { get; }
 		IFrame Next { get; set; }
 		TokenType TokenType { get; }
 

@@ -25,6 +25,70 @@ using System.Text;
 using DGrok.Framework;
 
 namespace DGrok.DelphiNodes {
+
+	public partial class AnonMethodImplementationNode : NonterminalNode {
+		public AnonMethodHeadingNode AnonMethodHeading { get; }
+		public FancyBlockNode FancyBlock { get; }
+
+		public AnonMethodImplementationNode(AnonMethodHeadingNode anonMethodHeading, FancyBlockNode fancyBlock) {
+			AnonMethodHeading = anonMethodHeading;
+			FancyBlock = fancyBlock;
+		}
+		public override IEnumerable<AstNode> ChildNodes {
+			get {
+				if(AnonMethodHeading != null) yield return AnonMethodHeading;
+				if(FancyBlock != null) yield return FancyBlock;
+			}
+		}
+		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
+			get {
+				yield return new KeyValuePair<string, AstNode>(nameof(AnonMethodHeading), AnonMethodHeading);
+				yield return new KeyValuePair<string, AstNode>(nameof(FancyBlock), FancyBlock);
+			}
+		}
+
+		public override void Accept(Visitor visitor) { visitor.VisitAnonMethodImplementationNode(this); }
+	}
+	public partial class AnonMethodHeadingNode : NonterminalNode {
+		public Token CloseParenthesis { get; }
+		public Token Colon { get; }
+		public Token MethodType { get; }
+		public Token OpenParenthesis { get; }
+		public ListNode<DelimitedItemNode<ParameterNode>> ParameterList { get; }
+		public AstNode ReturnType { get; }
+
+		public AnonMethodHeadingNode(Token methodType, Token openParenthesis, ListNode<DelimitedItemNode<ParameterNode>> parameterList, Token closeParenthesis, Token colon, AstNode returnType) {
+			MethodType = methodType;
+			OpenParenthesis = openParenthesis;
+			ParameterList = parameterList;
+			CloseParenthesis = closeParenthesis;
+			Colon = colon;
+			ReturnType = returnType;
+		}
+
+		public override IEnumerable<AstNode> ChildNodes {
+			get {
+				if(MethodType != null) yield return MethodType;
+				if(OpenParenthesis != null) yield return OpenParenthesis;
+				if(ParameterList != null) yield return ParameterList;
+				if(CloseParenthesis != null) yield return CloseParenthesis;
+				if(Colon != null) yield return Colon;
+				if(ReturnType != null) yield return ReturnType;
+			}
+		}
+		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
+			get {
+				yield return new KeyValuePair<string, AstNode>(nameof(MethodType), MethodType);
+				yield return new KeyValuePair<string, AstNode>(nameof(OpenParenthesis), OpenParenthesis);
+				yield return new KeyValuePair<string, AstNode>(nameof(ParameterList), ParameterList);
+				yield return new KeyValuePair<string, AstNode>(nameof(CloseParenthesis), CloseParenthesis);
+				yield return new KeyValuePair<string, AstNode>(nameof(Colon), Colon);
+				yield return new KeyValuePair<string, AstNode>(nameof(ReturnType), ReturnType);
+			}
+		}
+
+		public override void Accept(Visitor visitor) { visitor.VisitAnonMethodHeadingNode(this); }
+	}
 	public partial class ArrayTypeNode : NonterminalNode {
 		private Token _arrayKeywordNode;
 		private Token _closeBracketNode;
@@ -4041,6 +4105,39 @@ namespace DGrok.DelphiNodes {
 
 		public override void Accept(Visitor visitor) {
 			visitor.VisitWithStatementNode(this);
+		}
+	}
+	public partial class TypeGenericNode : NonterminalNode {
+		public Token CloseParanthesis { get; }
+		public ListNode<DelimitedItemNode<AstNode>> GenericParameters { get; }
+		public Token OpenParanthesis { get; }
+		public Token TypeIdentifier { get; }
+
+		public TypeGenericNode(Token typeIdentifier, Token openParanthesis, ListNode<DelimitedItemNode<AstNode>> genericParameters, Token closeParanthesis) {
+			TypeIdentifier = typeIdentifier;
+			OpenParanthesis = openParanthesis;
+			GenericParameters = genericParameters;
+			CloseParanthesis = closeParanthesis;
+		}
+		public override IEnumerable<AstNode> ChildNodes {
+			get {
+				if(TypeIdentifier != null) yield return TypeIdentifier;
+				if(OpenParanthesis != null) yield return OpenParanthesis;
+				if(GenericParameters != null) yield return GenericParameters;
+				if(CloseParanthesis != null) yield return CloseParanthesis;
+			}
+		}
+		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
+			get {
+				yield return new KeyValuePair<string, AstNode>("TypeIdentifier", TypeIdentifier);
+				yield return new KeyValuePair<string, AstNode>("OpenParanthesis", OpenParanthesis);
+				yield return new KeyValuePair<string, AstNode>("GenericParameters", GenericParameters);
+				yield return new KeyValuePair<string, AstNode>("CloseParanthesis", CloseParanthesis);
+			}
+		}
+
+		public override void Accept(Visitor visitor) {
+			visitor.VisitTypeGenericNode(this);
 		}
 	}
 }

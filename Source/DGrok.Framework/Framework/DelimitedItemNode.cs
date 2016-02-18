@@ -56,5 +56,7 @@ namespace DGrok.Framework {
 		public override void Accept(Visitor visitor) {
 			visitor.VisitDelimitedItemNode(this, ItemNode, DelimiterNode);
 		}
+
+		public override string ToString() { return "Delimited(" + ItemNode + ")"; }
 	}
 }

@@ -30,9 +30,7 @@ namespace DGrok.Framework {
 
 		public abstract Location EndLocation { get; }
 		public abstract Location Location { get; }
-		public AstNode ParentNode {
-			get { return _parentNode; }
-		}
+		public AstNode ParentNode { get { return _parentNode; } }
 
 		public abstract void Accept(Visitor visitor);
 		internal void BuildParentReferences(AstNode myParent) {
@@ -63,5 +61,7 @@ namespace DGrok.Framework {
 				return "<code spans include files>";
 			return first.FileSource.Substring(first.Offset, last.Offset - first.Offset);
 		}
+
+		public override string ToString() { return GetType().Name; }
 	}
 }

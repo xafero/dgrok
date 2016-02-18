@@ -39,6 +39,9 @@ namespace DGrok.Framework {
 		public Location Location {
 			get { return Token.Location; }
 		}
+		public Location EndLocation {
+			get { return Token.EndLocation; }
+		}
 		public IFrame Next {
 			get {
 				if(_next == null)

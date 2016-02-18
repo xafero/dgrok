@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using DGrok.DelphiNodes;
+using System.IO;
 
 namespace DGrok.Framework {
 	public partial class Parser {
@@ -31,13 +32,22 @@ namespace DGrok.Framework {
 		public Parser(IFrame frame) {
 			RuleType maxRuleType = 0;
 			foreach(RuleType ruleType in Enum.GetValues(typeof(RuleType))) {
-				if(ruleType > maxRuleType)
-					maxRuleType = ruleType;
+				if(ruleType > maxRuleType) maxRuleType = ruleType;
 			}
 			_rules = new Rule[((int)maxRuleType) + 1];
 
 			_nextFrame = frame;
 			_emptyList = CreateEmptyListNode<AstNode>();
+
+			switch(Path.GetExtension(frame.Location.FileName).ToLowerInvariant()) {
+			case ".pas": AddPasFileRules(); break;
+			case ".dfm": AddDfmFileRules(); break;
+			default: throw new ParseException("Unrecognised Extension", frame.Location);
+			}
+			AddPasFileRules();
+		}
+
+		private void AddPasFileRules() {
 			#region AddOp
 			AddTokenRule(RuleType.AddOp, TokenSets.AddOp);
 			#endregion
@@ -68,7 +78,7 @@ namespace DGrok.Framework {
 			});
 			#endregion
 			#region AnonMethodImplementation
-			AddRule(RuleType.AnonMethodImplementation, CanParseRule(RuleType.AnonMethodHeading), delegate {
+			AddRule(RuleType.AnonMethodImplementation, parser => CanParseRule(RuleType.AnonMethodHeading), delegate {
 				var anonMethodHeading = (AnonMethodHeadingNode)ParseRuleInternal(RuleType.AnonMethodHeading);
 				var fancyBlock = (FancyBlockNode)ParseRuleInternal(RuleType.FancyBlock);
 				return new AnonMethodImplementationNode(anonMethodHeading, fancyBlock);
@@ -391,7 +401,7 @@ namespace DGrok.Framework {
 				AstNode node;
 
 				if(Peek(0) == TokenType.ProcedureKeyword || Peek(0) == TokenType.FunctionKeyword) {
-					node = ParseRuleInternal(RuleType.MethodImplementation);
+					node = ParseRuleInternal(RuleType.AnonMethodImplementation);
 				} else {
 					node = ParseRuleInternal(RuleType.SimpleExpression);
 					while(CanParseRule(RuleType.RelOp)) {
@@ -1038,7 +1048,7 @@ namespace DGrok.Framework {
 			#region QualifiedIdent
 			AddRule(RuleType.QualifiedIdent, TokenSets.Ident.LookAhead, delegate {
 				AstNode node;
-				var location = PeekLocation(0);
+				var location = PeekEndLocation(0);
 				if(location.FileSource[location.Offset] == '<') {
 					node = ParseRule(RuleType.TypeGeneric);
 				} else {
@@ -1048,8 +1058,8 @@ namespace DGrok.Framework {
 				while(CanParseToken(TokenType.Dot)) {
 					Token dot = ParseToken(TokenType.Dot);
 
-					AstNode right; 
-					location = PeekLocation(0);
+					AstNode right;
+					location = PeekEndLocation(0);
 					if(location.FileSource[location.Offset] == '<') {
 						right = ParseRule(RuleType.TypeGeneric);
 					} else {
@@ -1325,7 +1335,7 @@ namespace DGrok.Framework {
 			});
 			#endregion
 			#region TypeDecl
-			AddRule(RuleType.TypeDecl, TokenSets.Ident.LookAhead, delegate {
+			AddRule(RuleType.TypeDecl, TokenSets.IdentNoVisibility.LookAhead, delegate {
 				Token name = ParseIdent();
 
 				if(CanParseToken(TokenType.LessThan)) {
@@ -1597,6 +1607,72 @@ namespace DGrok.Framework {
 			#endregion
 		}
 
+		private void AddDfmFileRules() {
+			#region Goal
+			AddRule(RuleType.Goal, LookAhead(TokenType.ObjectKeyword), delegate {
+				return ParseRuleInternal(RuleType.DfmObjectData);
+			});
+			#endregion
+
+			#region ObjectData
+			AddRule(RuleType.DfmObjectData, LookAhead(TokenType.ObjectKeyword), delegate {
+				var theObject = ParseToken(TokenType.ObjectKeyword);
+				var name = ParseToken(TokenType.Identifier);
+				var theColon = ParseToken(TokenType.Colon);
+				var type = ParseToken(TokenType.Identifier);
+				var properties = ParseRequiredRuleList<AstNode>(RuleType.DfmPropertyData);
+				var theEnd = ParseToken(TokenType.EndKeyword);
+
+				return properties;
+			});
+			#endregion
+			#region PropertyData
+			AddRule(RuleType.DfmPropertyData, parser => CanParseToken(TokenType.ObjectKeyword) || CanParseToken(TokenType.Identifier), delegate {
+				AstNode propertyDataNode;
+				if(Peek(0) == TokenType.ObjectKeyword) {
+					propertyDataNode = ParseRuleInternal(RuleType.DfmObjectData);
+
+				} else {
+					ListNode<Token> name = CreateEmptyListNode<Token>();
+					name.Items.Add(ParseToken(TokenType.Identifier));
+					while(Peek(0) == TokenType.Dot) {
+						name.Items.Add(ParseToken(TokenType.Dot));
+						name.Items.Add(ParseToken(TokenSets.ExtendedIdent));
+					}
+
+					var theEqualSign = ParseToken(TokenType.EqualSign);
+
+					AstNode value;
+					if(CanParseToken(TokenType.OpenParenthesis)) {
+						var openParanthesis = ParseToken(TokenType.OpenParenthesis);
+						var stringList = ParseTokenList(new TokenSet(TokenType.StringLiteral));
+						var closeParanthesis = ParseToken(TokenType.CloseParenthesis);
+						value = stringList;//TODO
+
+					} else if(CanParseToken(TokenType.OpenBracket)) {
+						var openBracket = ParseToken(TokenType.OpenBracket);
+						while(Peek(0) != TokenType.CloseBracket) {
+							MoveNext();
+						}
+						var closeBracket = ParseToken(TokenType.CloseBracket);
+						value = openBracket; //TODO
+
+					} else if(CanParseToken(TokenType.MinusSign)) {
+						value = ParseToken(TokenType.MinusSign);//TODO
+						value = ParseToken(TokenType.Number);
+					} else {
+						value = ParseToken(Peek(0));
+					}
+
+					propertyDataNode = value;
+				}
+
+				return propertyDataNode;
+			});
+			#endregion
+		}
+
+
 		private static IFrame FrameFromTokens(IEnumerable<Token> tokens) {
 			IFrame firstFrame = new EofFrame(new Location("", "", 0));
 			IFrame previousFrame = null;
@@ -1730,13 +1806,13 @@ namespace DGrok.Framework {
 			}
 			return frame.TokenType;
 		}
-		private Location PeekLocation(int offset) {
+		private Location PeekEndLocation(int offset) {
 			IFrame frame = _nextFrame;
 			while(offset > 0) {
 				frame = frame.Next;
 				--offset;
 			}
-			return frame.Location;
+			return frame.EndLocation;
 		}
 		private Token TryParseToken(TokenType tokenType) {
 			if(CanParseToken(tokenType))

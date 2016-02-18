@@ -26,34 +26,25 @@ namespace DGrok.Framework {
 		where T : AstNode {
 		private List<T> _items;
 
-		public ListNode(IEnumerable<T> items) {
-			_items = new List<T>(items);
-		}
+		public ListNode(IEnumerable<T> items) { _items = new List<T>(items); }
 
 		public override IEnumerable<AstNode> ChildNodes {
-			get {
-				foreach(T item in Items)
-					yield return item;
-			}
+			get { foreach(T item in Items) yield return item; }
 		}
-		public IList<T> Items {
-			get { return _items; }
-		}
+		public IList<T> Items { get { return _items; } }
 		public IEnumerable<AstNode> ItemsAsBase {
-			get {
-				foreach(AstNode node in Items)
-					yield return node;
-			}
+			get { foreach(AstNode node in Items) yield return node; }
 		}
 		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
 			get {
-				for(int i = 0; i < _items.Count; ++i)
+				for(int i = 0; i < _items.Count; ++i) {
 					yield return new KeyValuePair<string, AstNode>("Items[" + i + "]", Items[i]);
+				}
 			}
 		}
 
-		public override void Accept(Visitor visitor) {
-			visitor.VisitListNode(this, ItemsAsBase);
-		}
+		public override void Accept(Visitor visitor) { visitor.VisitListNode(this, ItemsAsBase); }
+
+		public override string ToString() { return string.Join(">", Items); }
 	}
 }

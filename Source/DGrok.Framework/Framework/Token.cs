@@ -35,37 +35,23 @@ namespace DGrok.Framework {
 			_parsedText = parsedText;
 		}
 
-		public override IEnumerable<AstNode> ChildNodes {
-			get { yield break; }
-		}
+		public override IEnumerable<AstNode> ChildNodes { get { yield break; } }
 		public override Location EndLocation {
 			get { return new Location(Location.FileName, Location.FileSource, Location.Offset + Text.Length); }
 		}
-		public override Location Location {
-			get { return _location; }
-		}
-		public string ParsedText {
-			get { return _parsedText; }
-		}
-		public override IEnumerable<KeyValuePair<string, AstNode>> Properties {
-			get { yield break; }
-		}
-		public string Text {
-			get { return _text; }
-		}
-		public TokenType Type {
-			get { return _type; }
-		}
+		public override Location Location { get { return _location; } }
+		public string ParsedText { get { return _parsedText; } }
+		public override IEnumerable<KeyValuePair<string, AstNode>> Properties { get { yield break; } }
+		public string Text { get { return _text; } }
+		public TokenType Type { get { return _type; } }
 
-		public override void Accept(Visitor visitor) {
-			visitor.VisitToken(this);
-		}
+		public override void Accept(Visitor visitor) { visitor.VisitToken(this); }
 		public override void InspectTo(StringBuilder builder, int currentIndentCount) {
 			builder.Append(Type.ToString());
 			builder.Append(" |");
 			builder.Append(Text);
 			builder.Append("|");
-			if(!String.IsNullOrEmpty(ParsedText)) {
+			if(!string.IsNullOrEmpty(ParsedText)) {
 				builder.Append(", parsed=|");
 				builder.Append(ParsedText);
 				builder.Append("|");
@@ -74,5 +60,7 @@ namespace DGrok.Framework {
 		public Token WithTokenType(TokenType newType) {
 			return new Token(newType, Location, Text, ParsedText);
 		}
+
+		public override string ToString() { return Type + "(" + ToCode() + ")"; }
 	}
 }

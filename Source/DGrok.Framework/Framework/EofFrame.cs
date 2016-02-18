@@ -38,6 +38,9 @@ namespace DGrok.Framework {
 		public Location Location {
 			get { return _location; }
 		}
+		public Location EndLocation {
+			get { return _location; }
+		}
 		public IFrame Next {
 			get { throw new ParseException("Expected token but found end of file", Location); }
 			set { throw new InvalidOperationException("Cannot set Next on NullFrame"); }

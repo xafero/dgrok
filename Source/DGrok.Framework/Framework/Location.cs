@@ -36,19 +36,15 @@ namespace DGrok.Framework {
 
 		public string Directory {
 			get {
-				if(String.IsNullOrEmpty(_fileName))
-					return "";
+				if(string.IsNullOrEmpty(_fileName)) return "";
 				return Path.GetDirectoryName(_fileName);
 			}
 		}
-		public string FileName {
-			get { return _fileName; }
-		}
-		public string FileSource {
-			get { return _fileSource; }
-		}
-		public int Offset {
-			get { return _offset; }
-		}
+		public string FileName { get { return _fileName; } }
+		public string FileSource { get { return _fileSource; } }
+		public int Offset { get { return _offset; } }
+
+		public override string ToString() { return _fileName + " at " + _offset; }
+
 	}
 }

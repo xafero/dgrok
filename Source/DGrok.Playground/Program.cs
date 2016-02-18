@@ -44,7 +44,7 @@ namespace DGrok.Playground {
         }
 
         static void Main(string[] args) {
-            ParseFile(@"D:\DelphiXE\FW\WWObjekte.pas");
+            ParseFile(@"H:\Work\VK60EditObjekte.pas");
 
 
             var matches = new List<string>();
