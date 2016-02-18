@@ -44,39 +44,27 @@ namespace DGrok.Playground {
         }
 
         static void Main(string[] args) {
-            ParseFile(@"H:\Work\VK60EditObjekte.pas");
+            ParseFile(@"H:\Work\Unit.pas");
 
 
             var matches = new List<string>();
             var fileLoader = new FileLoader();
             
-            var path = @"D:\DelphiXE\FW";
+            var path = @"E:\Work";
             foreach (var filePath in Directory.EnumerateFiles(path, "*.pas", SearchOption.TopDirectoryOnly)) {
-                if (Path.GetFileName(filePath).StartsWith("frx") || Path.GetFileName(filePath).StartsWith("frEngine")) {
-                    continue;
-                }
-
                 try {
                     var content = File.ReadAllText(filePath, GetFileEncoding(filePath));
                     var parser = Parser.FromText(content, filePath, CompilerDefines.CreateStandard(), fileLoader);
                     var parseTree = parser.ParseRule(RuleType.Goal);
+
                 } catch(Exception ex) {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Error in " + filePath);
                     Console.ResetColor();
                     Directory.CreateDirectory("Errors");
-                    File.WriteAllText(Path.Combine("Errors", Path.GetFileNameWithoutExtension(filePath) + " " + DateTime.UtcNow.ToString("HHmmssffff") + ".txt"), ex.ToString());
+                    File.WriteAllText(Path.Combine("Errors", Path.GetFileName(filePath) + ".txt"), ex.ToString());
                 }
             }
-
-                    
-                    
-            //var filePath = @"D:\ParseTest.pas";
-            //filePath = @"D:\DelphiXE\FW\VK60EditObjekte.pas";
-            //var content = File.ReadAllText(filePath);
-            //var parser = Parser.FromText(content, filePath, CompilerDefines.CreateStandard(), new FileLoader());
-            //var parseTree = parser.ParseRule(RuleType.Goal);
-
         }
     }
 }
