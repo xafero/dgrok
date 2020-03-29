@@ -48,7 +48,7 @@ namespace DGrok.Framework {
 				throw new CancelException();
 		}
 		public static CodeBase Execute(CodeBaseOptions options, BackgroundWorker backgroundWorker) {
-			CodeBase codeBase = new CodeBase(options.CreateCompilerDefines(), new FileLoader());
+			CodeBase codeBase = new CodeBase(options.CreateCompilerDefines(), new FileLoader(false));
 			CodeBaseWorker worker = new CodeBaseWorker(codeBase, options, backgroundWorker);
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();

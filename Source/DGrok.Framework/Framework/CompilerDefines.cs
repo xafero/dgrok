@@ -84,6 +84,7 @@ namespace DGrok.Framework {
 			defines.DefineDirectiveAsFalse("IF GenericOperations");
 			defines.DefineDirectiveAsFalse("IF GenericVariants");
 			defines.DefineDirectiveAsFalse("IFOPT R-");
+			
 
 			// Version tags. Not surprisingly, you should DefineSymbol() only one.
 			defines.UndefineSymbol("VER80");  // Delphi 1

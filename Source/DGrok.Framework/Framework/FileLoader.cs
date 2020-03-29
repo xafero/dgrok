@@ -20,15 +20,27 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace DGrok.Framework {
 	public class FileLoader : IFileLoader {
+		public FileLoader(bool ignoreMissingFiles, params string[] includes) {
+			IgnoreMissingFiles = ignoreMissingFiles;
+			Includes = includes;
+		}
+
+		public bool IgnoreMissingFiles { get; }
+		public string[] Includes { get; }
+
 		public string ExpandFileName(string currentDirectory, string fileName) {
-			return Path.Combine(currentDirectory, fileName);
+			var filePath = Path.Combine(currentDirectory, fileName);
+			if(File.Exists(filePath)) return filePath;
+
+			return Includes.Select(x => Path.Combine(x, fileName)).FirstOrDefault(x => File.Exists(x)) ?? filePath;
 		}
 		public string Load(string fileName) {
-			return File.ReadAllText(fileName);
+			return File.Exists(fileName) || !IgnoreMissingFiles ? File.ReadAllText(fileName) : "";
 		}
 	}
 }

@@ -134,6 +134,9 @@ namespace DGrok.Framework {
 			_directiveTypes["NODEFINE"] = DirectiveType.Ignored;
 			_directiveTypes["NOINCLUDE"] = DirectiveType.Ignored;
 			_directiveTypes["ZEROBASEDSTRINGS"] = DirectiveType.Ignored;
+
+			//Unsorted
+			_directiveTypes["SCOPEDENUMS"] = DirectiveType.Ignored;
 		}
 
 		public IEnumerable<Token> Tokens {

@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Text;
 using DGrok.DelphiNodes;
 using System.IO;
+using System.Linq;
 
 namespace DGrok.Framework {
 	public partial class Parser {
@@ -40,9 +41,9 @@ namespace DGrok.Framework {
 			_emptyList = CreateEmptyListNode<AstNode>();
 
 			switch(Path.GetExtension(frame.Location.FileName).ToLowerInvariant()) {
-			case ".pas": AddPasFileRules(); break;
-			case ".dfm": AddDfmFileRules(); break;
-			default: throw new ParseException("Unrecognised Extension", frame.Location);
+				case ".pas": AddPasFileRules(); break;
+				case ".dfm": AddDfmFileRules(); break;
+				default: throw new ParseException("Unrecognised Extension", frame.Location);
 			}
 			AddPasFileRules();
 		}
@@ -126,35 +127,52 @@ namespace DGrok.Framework {
 			}, delegate {
 				AstNode node = ParseRuleInternal(RuleType.Particle);
 				while(true) {
-					if(CanParseToken(TokenType.Dot)) {
-						Token dot = ParseToken(TokenType.Dot);
-						AstNode right = ParseRuleInternal(RuleType.ExtendedIdent);
-						node = new BinaryOperationNode(node, dot, right);
+					var isGeneric = false;
+					if(CanParseToken(TokenType.Dot) && Peek(1) == TokenType.Identifier && Peek(2) == TokenType.LessThan) {
+						var originalFrame = _nextFrame;
+						try {
+							Token dot = ParseToken(TokenType.Dot);
+							AstNode right = ParseRuleInternal(RuleType.TypeGeneric);
+							node = new BinaryOperationNode(node, dot, right);
+							isGeneric = true;
 
-					} else if(CanParseToken(TokenType.Caret)) {
-						Token caret = ParseToken(TokenType.Caret);
-						node = new PointerDereferenceNode(node, caret);
+						} catch(ParseException) {
+							_nextFrame = originalFrame;
+						}
+					}
 
-					} else if(CanParseToken(TokenType.OpenBracket)) {
-						Token openDelimiter = ParseToken(TokenType.OpenBracket);
-						ListNode<DelimitedItemNode<AstNode>> parameterList =
-							(ListNode<DelimitedItemNode<AstNode>>)ParseRuleInternal(RuleType.ExpressionList);
-						Token closeDelimiter = ParseToken(TokenType.CloseBracket);
-						node = new ParameterizedNode(node, openDelimiter, parameterList, closeDelimiter);
+					if(!isGeneric) {
+						if(CanParseToken(TokenType.Dot)) {
+							Token dot = ParseToken(TokenType.Dot);
+							AstNode right = ParseRuleInternal(RuleType.ExtendedIdent);
+							node = new BinaryOperationNode(node, dot, right);
 
-					} else if(CanParseToken(TokenType.OpenParenthesis)) {
-						Token openDelimiter = ParseToken(TokenType.OpenParenthesis);
-						ListNode<DelimitedItemNode<AstNode>> parameterList;
-						if(CanParseRule(RuleType.ExpressionList)) {
-							parameterList =
-								ParseDelimitedList<AstNode>(RuleType.ParameterExpression, TokenType.Comma);
+						} else if(CanParseToken(TokenType.Caret)) {
+							Token caret = ParseToken(TokenType.Caret);
+							node = new PointerDereferenceNode(node, caret);
 
-						} else parameterList = CreateEmptyListNode<DelimitedItemNode<AstNode>>();
+						} else if(CanParseToken(TokenType.OpenBracket)) {
+							Token openDelimiter = ParseToken(TokenType.OpenBracket);
+							ListNode<DelimitedItemNode<AstNode>> parameterList =
+								(ListNode<DelimitedItemNode<AstNode>>)ParseRuleInternal(RuleType.ExpressionList);
+							Token closeDelimiter = ParseToken(TokenType.CloseBracket);
+							node = new ParameterizedNode(node, openDelimiter, parameterList, closeDelimiter);
 
-						Token closeDelimiter = ParseToken(TokenType.CloseParenthesis);
-						node = new ParameterizedNode(node, openDelimiter, parameterList, closeDelimiter);
-					} else
-						break;
+						} else if(CanParseToken(TokenType.OpenParenthesis)) {
+							Token openDelimiter = ParseToken(TokenType.OpenParenthesis);
+							ListNode<DelimitedItemNode<AstNode>> parameterList;
+							if(CanParseRule(RuleType.ExpressionList)) {
+								parameterList =
+									ParseDelimitedList<AstNode>(RuleType.ParameterExpression, TokenType.Comma);
+
+							} else parameterList = CreateEmptyListNode<DelimitedItemNode<AstNode>>();
+
+							Token closeDelimiter = ParseToken(TokenType.CloseParenthesis);
+							node = new ParameterizedNode(node, openDelimiter, parameterList, closeDelimiter);
+						} else {
+							break;
+						}
+					}
 				}
 				return node;
 			});
@@ -319,6 +337,11 @@ namespace DGrok.Framework {
 				if(CanParseToken(parameterizedDirectives)) {
 					directive = ParseToken(parameterizedDirectives);
 					value = ParseRuleInternal(RuleType.Expression);
+
+				} else if(CanParseToken(TokenType.DeprecatedSemikeyword)) {
+					directive = ParseToken(TokenType.DeprecatedSemikeyword);
+					value = ParseToken(TokenType.StringLiteral);
+
 				} else if(CanParseToken(TokenType.ExternalSemikeyword)) {
 					directive = ParseToken(TokenType.ExternalSemikeyword);
 					if(CanParseRule(RuleType.Expression)) {
@@ -455,11 +478,36 @@ namespace DGrok.Framework {
 			#region Factor
 			AddRule(RuleType.Factor, TokenSets.Expression.LookAhead, delegate {
 				if(CanParseRule(RuleType.UnaryOperator)) {
-					Token theOperator = (Token)ParseRuleInternal(RuleType.UnaryOperator);
-					AstNode operand = ParseRuleInternal(RuleType.Factor);
-					return new UnaryOperationNode(theOperator, operand);
-				} else
-					return ParseRuleInternal(RuleType.Atom);
+					var theOperator = (Token)ParseRuleInternal(RuleType.UnaryOperator);
+
+
+
+					if(CanParseRule(RuleType.Expression)) { //Can of Worms?
+						var theExpression = ParseRule(RuleType.Expression);
+						return new UnaryOperationNode(theOperator, theExpression);
+
+					} else if(CanParseToken(TokenType.OpenParenthesis)) {
+						var openParenthesis = ParseToken(TokenType.OpenParenthesis);
+						var expression = ParseRuleInternal(RuleType.Expression);
+						var closeParenthesis = ParseToken(TokenType.CloseParenthesis);
+						return new ParenthesizedExpressionNode(openParenthesis, expression, closeParenthesis);
+
+					} else if(CanParseToken(TokenType.Number)) {
+						var theNumber = ParseToken(TokenType.Number);
+						return new UnaryOperationNode(theOperator, theNumber);
+
+					} else if(CanParseToken(TokenType.Identifier)) {
+						var operand = ParseRuleInternal(RuleType.Factor);
+						return new UnaryOperationNode(theOperator, operand);
+
+					} else {
+						return theOperator;
+					}
+
+				} else {
+					var atom = ParseRuleInternal(RuleType.Atom);
+					return atom;
+				}
 			});
 			#endregion
 			#region FancyBlock
@@ -1047,11 +1095,17 @@ namespace DGrok.Framework {
 			#endregion
 			#region QualifiedIdent
 			AddRule(RuleType.QualifiedIdent, TokenSets.Ident.LookAhead, delegate {
-				AstNode node;
+				AstNode node = null;
 				var location = PeekEndLocation(0);
 				if(location.FileSource[location.Offset] == '<') {
-					node = ParseRule(RuleType.TypeGeneric);
-				} else {
+					var originalFrame = _nextFrame;
+					try {
+						node = ParseRule(RuleType.TypeGeneric);
+					} catch(ParseException) {
+						_nextFrame = originalFrame;
+					}
+				}
+				if(node == null) {
 					node = ParseRuleInternal(RuleType.Ident);
 				}
 
@@ -1309,28 +1363,41 @@ namespace DGrok.Framework {
 			#endregion
 			#region TypedConstant
 			AddRule(RuleType.TypedConstant, TokenSets.Expression.LookAhead, delegate {
+				//Performance improvments: Always relying on try catch is slow
+				var offset = 0;
+				while(Peek(offset) == TokenType.OpenParenthesis) offset++;
+				var skipExpression = offset > 0 && Peek(offset) == TokenType.Identifier && Peek(offset + 1) == TokenType.Colon;
+				var skipArray = skipExpression && offset == 1;
+
 				IFrame originalFrame = _nextFrame;
-				try {
-					return ParseRuleInternal(RuleType.Expression);
-				} catch(ParseException) {
-					_nextFrame = originalFrame;
+				if(!skipExpression) {
+					try {
+						return ParseRuleInternal(RuleType.Expression);
+					} catch(ParseException) {
+						_nextFrame = originalFrame;
+					}
 				}
-				Token openParenthesis;
+
 				ListNode<DelimitedItemNode<AstNode>> itemList;
+				Token openParenthesis;
 				Token closeParenthesis;
-				try {
-					openParenthesis = ParseToken(TokenType.OpenParenthesis);
-					itemList = ParseDelimitedList<AstNode>(RuleType.TypedConstant, TokenType.Comma);
-					closeParenthesis = ParseToken(TokenType.CloseParenthesis);
-				} catch(ParseException) {
-					_nextFrame = originalFrame;
-					openParenthesis = ParseToken(TokenType.OpenParenthesis);
-					if(!CanParseToken(TokenType.CloseParenthesis))
-						itemList = ParseDelimitedList<AstNode>(RuleType.RecordFieldConstant, TokenType.Semicolon);
-					else
-						itemList = CreateEmptyListNode<DelimitedItemNode<AstNode>>();
-					closeParenthesis = ParseToken(TokenType.CloseParenthesis);
+				if(!skipArray) {
+					try {
+						openParenthesis = ParseToken(TokenType.OpenParenthesis);
+						itemList = ParseDelimitedList<AstNode>(RuleType.TypedConstant, TokenType.Comma);
+						closeParenthesis = ParseToken(TokenType.CloseParenthesis);
+						return new ConstantListNode(openParenthesis, itemList, closeParenthesis);
+					} catch(ParseException) {
+						_nextFrame = originalFrame;
+					}
 				}
+
+				openParenthesis = ParseToken(TokenType.OpenParenthesis);
+				if(!CanParseToken(TokenType.CloseParenthesis))
+					itemList = ParseDelimitedList<AstNode>(RuleType.RecordFieldConstant, TokenType.Semicolon);
+				else
+					itemList = CreateEmptyListNode<DelimitedItemNode<AstNode>>();
+				closeParenthesis = ParseToken(TokenType.CloseParenthesis);
 				return new ConstantListNode(openParenthesis, itemList, closeParenthesis);
 			});
 			#endregion
@@ -1353,6 +1420,21 @@ namespace DGrok.Framework {
 					Token type = ParseToken(TokenSets.ForwardableType);
 					Token semicolon = ParseToken(TokenType.Semicolon);
 					return new TypeForwardDeclarationNode(name, equalSign, type, semicolon);
+
+				} else if(Peek(0) == TokenType.ReferenceSemikeyword && Peek(1) == TokenType.ToKeyword) {
+					Token typeKeyword = TryParseToken(TokenType.TypeKeyword);
+
+					//TODO
+					var referenceSemikeyword = ParseToken(TokenType.ReferenceSemikeyword);
+					var toKeyword = ParseToken(TokenType.ToKeyword);
+
+					AstNode type = ParseRuleInternal(RuleType.Type);
+					ListNode<Token> portabilityDirectiveList =
+						ParseOptionalRuleList<Token>(RuleType.PortabilityDirective);
+					Token semicolon = ParseToken(TokenType.Semicolon);
+					return new TypeDeclNode(name, equalSign, typeKeyword, type,
+						portabilityDirectiveList, semicolon);
+
 				} else {
 					Token typeKeyword = TryParseToken(TokenType.TypeKeyword);
 					AstNode type = ParseRuleInternal(RuleType.Type);
@@ -1367,8 +1449,15 @@ namespace DGrok.Framework {
 			#region TypeSection
 			AddRule(RuleType.TypeSection, LookAhead(TokenType.TypeKeyword), delegate {
 				Token type = ParseToken(TokenType.TypeKeyword);
-				ListNode<AstNode> typeList = ParseRequiredRuleList<AstNode>(RuleType.TypeDecl);
-				return new TypeSectionNode(type, typeList);
+
+				if(!CanParseToken(TokenSets.Visibility)) {
+					ListNode<AstNode> typeList = ParseRequiredRuleList<AstNode>(RuleType.TypeDecl);
+					return new TypeSectionNode(type, typeList);
+				} else {
+					//Empty type section
+					return new TypeSectionNode(type, new ListNode<AstNode>(Enumerable.Empty<AstNode>()));
+				}
+
 			});
 			#endregion
 			#region TypeGenericParameters
@@ -1382,8 +1471,14 @@ namespace DGrok.Framework {
 					} else if(Peek(0) == TokenType.StringKeyword) {
 						genericParameter = ParseToken(TokenType.StringKeyword);
 
+					} else if(Peek(0) == TokenType.Identifier && Peek(1) == TokenType.Colon) {
+						genericParameter = ParseRule(RuleType.Ident);
+						var colonToken = ParseToken(TokenType.Colon);
+						var genericType = ParseToken(TokenSets.GenericParameterType);
+
+
 					} else {
-						genericParameter = ParseToken(TokenSets.Ident);
+						genericParameter = ParseRule(RuleType.QualifiedIdent);
 					}
 
 					return genericParameter;
@@ -1447,7 +1542,7 @@ namespace DGrok.Framework {
 			#region Unit
 			AddRule(RuleType.Unit, LookAhead(TokenType.UnitKeyword), delegate {
 				Token unit = ParseToken(TokenType.UnitKeyword);
-				Token unitName = ParseIdent();
+				AstNode unitName = ParseRule(RuleType.QualifiedIdent);
 				ListNode<Token> portabilityDirectives = ParseTokenList(TokenSets.PortabilityDirective);
 				Token semicolon = ParseToken(TokenType.Semicolon);
 				UnitSectionNode interfaceSection = (UnitSectionNode)ParseRuleInternal(RuleType.InterfaceSection);

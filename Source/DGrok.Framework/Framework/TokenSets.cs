@@ -56,6 +56,7 @@ namespace DGrok.Framework {
 		public static TokenSet VarHeader { get; }
 		public static TokenSet Visibility { get; }
 		public static TokenSet VisibilitySingleWord { get; }
+		public static TokenSet GenericParameterType { get; }
 
 		static TokenSets() {
 			AddOp = new TokenSet("addition operator");
@@ -304,6 +305,7 @@ namespace DGrok.Framework {
 			Semikeyword.Add(TokenType.VirtualSemikeyword);
 			Semikeyword.Add(TokenType.WriteSemikeyword);
 			Semikeyword.Add(TokenType.WriteOnlySemikeyword);
+			Semikeyword.Add(TokenType.ReferenceSemikeyword);
 
 			UnaryOperator = new TokenSet("unary operator");
 			UnaryOperator.Add(TokenType.AtSign);
@@ -373,6 +375,12 @@ namespace DGrok.Framework {
 			Visibility = new TokenSet("visibility specifier");
 			Visibility.Add(TokenType.StrictSemikeyword);
 			Visibility.AddRange(VisibilitySingleWord);
+
+			GenericParameterType = new TokenSet("Generic Parameter Type");
+			GenericParameterType.AddRange(SimpleParameterType);
+			GenericParameterType.Add(TokenType.RecordKeyword);
+			GenericParameterType.Add(TokenType.ClassKeyword);
+			GenericParameterType.Add(TokenType.ConstructorKeyword);
 		}
 
 	}

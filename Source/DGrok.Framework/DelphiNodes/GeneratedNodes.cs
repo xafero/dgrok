@@ -3455,9 +3455,9 @@ namespace DGrok.DelphiNodes {
 		private ListNode<Token> _portabilityDirectiveListNode;
 		private Token _semicolonNode;
 		private Token _unitKeywordNode;
-		private Token _unitNameNode;
+		private AstNode _unitNameNode;
 
-		public UnitNode(Token unitKeywordNode, Token unitNameNode, ListNode<Token> portabilityDirectiveListNode, Token semicolonNode, UnitSectionNode interfaceSectionNode, UnitSectionNode implementationSectionNode, InitSectionNode initSectionNode, Token dotNode) {
+		public UnitNode(Token unitKeywordNode, AstNode unitNameNode, ListNode<Token> portabilityDirectiveListNode, Token semicolonNode, UnitSectionNode interfaceSectionNode, UnitSectionNode implementationSectionNode, InitSectionNode initSectionNode, Token dotNode) {
 			_unitKeywordNode = unitKeywordNode;
 			_unitNameNode = unitNameNode;
 			_portabilityDirectiveListNode = portabilityDirectiveListNode;
@@ -3489,7 +3489,7 @@ namespace DGrok.DelphiNodes {
 		public Token UnitKeywordNode {
 			get { return _unitKeywordNode; }
 		}
-		public Token UnitNameNode {
+		public AstNode UnitNameNode {
 			get { return _unitNameNode; }
 		}
 

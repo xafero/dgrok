@@ -90,6 +90,7 @@ namespace DGrok.Framework {
 		VirtualSemikeyword,
 		WriteSemikeyword,
 		WriteOnlySemikeyword,
+		ReferenceSemikeyword,
 		#endregion
 		#region Real keywords (can't be used as identifiers, except after '.')
 		AndKeyword,
