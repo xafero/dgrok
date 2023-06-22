@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 using DGrok.Framework;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using NUnit.Framework.Constraints;
 
 namespace DGrok.Tests

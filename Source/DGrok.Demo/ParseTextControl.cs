@@ -18,11 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using DGrok.Framework;
 
@@ -44,6 +40,8 @@ namespace DGrok.Demo
             set { _ruleType = value; }
         }
 
+        public string HintFileName { get; set; }
+
         private void btnParse_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -60,7 +58,8 @@ namespace DGrok.Demo
         {
             try
             {
-                Parser parser = Parser.FromText(viewSourceControl1.Text, "input", CompilerDefines.CreateStandard(),
+                var currentFileName = HintFileName ?? "input";
+                Parser parser = Parser.FromText(viewSourceControl1.Text, currentFileName, CompilerDefines.CreateStandard(),
                     new MemoryFileLoader());
                 AstNode tree = parser.ParseRule(_ruleType);
                 edtResults.Text = tree.Inspect();

@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using DGrok.DelphiNodes;
 using DGrok.Framework;
 

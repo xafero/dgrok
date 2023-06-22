@@ -18,11 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using System.Text;
 using DGrok.Framework;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace DGrok.Tests
 {
@@ -37,11 +34,15 @@ namespace DGrok.Tests
             _alternator = new Parser.Alternator();
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void DisplayTextWithNoAlternates()
         {
-            _alternator.DisplayText();
+            Assert.Throws<InvalidOperationException>(delegate
+            {
+                _alternator.DisplayText();
+            });
         }
+
         [Test]
         public void DisplayTextWithOneAlternate()
         {

@@ -17,13 +17,12 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
 using System.Collections.Generic;
-using System.Text;
 using DGrok.Framework;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace DGrok.Tests
 {
@@ -299,13 +298,18 @@ namespace DGrok.Tests
             Assert.That("{$IF False}{$UNDEF FOO}{$IFEND} {$IFDEF FOO}Foo{$ENDIF}", LexesAndFiltersAs(
                 "Identifier |Foo|"));
         }
-        [Test, ExpectedException(typeof(LexException))]
+
+        [Test]
         public void ThrowOnUnrecognizedDirective()
         {
-            Lexer lexer = new Lexer("{$FOO}", "");
-            TokenFilter filter = new TokenFilter(lexer.Tokens, _defines, _fileLoader);
-            new List<Token>(filter.Tokens);
+            Assert.Throws<LexException>(delegate
+            {
+                Lexer lexer = new Lexer("{$FOO}", "");
+                TokenFilter filter = new TokenFilter(lexer.Tokens, _defines, _fileLoader);
+                new List<Token>(filter.Tokens);
+            });
         }
+
         [Test]
         public void UnrecognizedIsIgnoredInFalseIf()
         {

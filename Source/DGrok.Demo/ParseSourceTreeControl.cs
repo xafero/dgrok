@@ -21,12 +21,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using DGrok.Framework;
-using DGrok.Visitors;
 
 namespace DGrok.Demo
 {
@@ -353,6 +351,7 @@ namespace DGrok.Demo
                 control.Dock = DockStyle.Fill;
                 form.Controls.Add(control);
                 form.Show();
+                control.HintFileName = Path.GetFileName(fileName);
                 control.ParseString(File.ReadAllText(fileName));
             }
             finally

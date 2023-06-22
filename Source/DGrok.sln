@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGrok.Framework", "DGrok.Fr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGrok.Playground", "DGrok.Playground\DGrok.Playground.csproj", "{BD007F6C-BBE3-45A7-A623-05CB1B5C3444}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGrok.Demo", "DGrok.Demo\DGrok.Demo.csproj", "{3B51FEC0-55CD-45F6-9306-F6ABBCEA2D27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BD007F6C-BBE3-45A7-A623-05CB1B5C3444}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD007F6C-BBE3-45A7-A623-05CB1B5C3444}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD007F6C-BBE3-45A7-A623-05CB1B5C3444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B51FEC0-55CD-45F6-9306-F6ABBCEA2D27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B51FEC0-55CD-45F6-9306-F6ABBCEA2D27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B51FEC0-55CD-45F6-9306-F6ABBCEA2D27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B51FEC0-55CD-45F6-9306-F6ABBCEA2D27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

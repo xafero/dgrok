@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using System.Text;
 using DGrok.DelphiNodes;
 using System.IO;
 using System.Linq;
@@ -1097,7 +1096,7 @@ namespace DGrok.Framework {
 			AddRule(RuleType.QualifiedIdent, TokenSets.Ident.LookAhead, delegate {
 				AstNode node = null;
 				var location = PeekEndLocation(0);
-				if(location.FileSource[location.Offset] == '<') {
+				if(CheckChar(location.FileSource, location.Offset) == '<') {
 					var originalFrame = _nextFrame;
 					try {
 						node = ParseRule(RuleType.TypeGeneric);
@@ -1114,7 +1113,7 @@ namespace DGrok.Framework {
 
 					AstNode right;
 					location = PeekEndLocation(0);
-					if(location.FileSource[location.Offset] == '<') {
+					if(CheckChar(location.FileSource, location.Offset) == '<') {
 						right = ParseRule(RuleType.TypeGeneric);
 					} else {
 						right = ParseRuleInternal(RuleType.ExtendedIdent);
@@ -1702,7 +1701,16 @@ namespace DGrok.Framework {
 			#endregion
 		}
 
-		private void AddDfmFileRules() {
+        private static char? CheckChar(string fileSource, int locationOffset)
+        {
+            if (locationOffset < fileSource.Length)
+            {
+                return fileSource[locationOffset];
+            }
+            return null;
+        }
+
+        private void AddDfmFileRules() {
 			#region Goal
 			AddRule(RuleType.Goal, LookAhead(TokenType.ObjectKeyword), delegate {
 				return ParseRuleInternal(RuleType.DfmObjectData);
@@ -1768,8 +1776,8 @@ namespace DGrok.Framework {
 		}
 
 
-		private static IFrame FrameFromTokens(IEnumerable<Token> tokens) {
-			IFrame firstFrame = new EofFrame(new Location("", "", 0));
+		private static IFrame FrameFromTokens(IEnumerable<Token> tokens, string fileName = "test.pas") {
+			IFrame firstFrame = new EofFrame(new Location(fileName, "", 0));
 			IFrame previousFrame = null;
 			foreach(Token token in tokens) {
 				IFrame frame = new Frame(token);

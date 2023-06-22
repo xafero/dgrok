@@ -17,9 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using DGrok.Framework;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
@@ -43,9 +41,9 @@ namespace DGrok.Tests
                 Pass();
             }
         }
-        public static Parser CreateParser(string source)
+        public static Parser CreateParser(string source, string fileName = "test.pas")
         {
-            return Parser.FromText(source, "", CompilerDefines.CreateEmpty(),
+            return Parser.FromText(source, fileName, CompilerDefines.CreateEmpty(),
                 new MemoryFileLoader());
         }
         protected Constraint ParsesAs(params string[] expected)

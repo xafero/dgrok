@@ -17,13 +17,10 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using DGrok.DelphiNodes;
 using DGrok.Framework;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace DGrok.Tests
 {
@@ -32,11 +29,11 @@ namespace DGrok.Tests
     {
         private Token MakeToken(TokenType type, string text)
         {
-            return new Token(type, new Location("", "", 0), text, "");
+            return new Token(type, new Location("test.pas", "", 0), text, "");
         }
         private AstNode Parse(string text, RuleType ruleType)
         {
-            Parser parser = Parser.FromText(text, "", CompilerDefines.CreateEmpty(), new MemoryFileLoader());
+            Parser parser = Parser.FromText(text, "test.pas", CompilerDefines.CreateEmpty(), new MemoryFileLoader());
             return parser.ParseRule(ruleType);
         }
 

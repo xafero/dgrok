@@ -19,11 +19,9 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using System.Text;
 using DGrok.DelphiNodes;
 using DGrok.Framework;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace DGrok.Tests
 {
@@ -71,11 +69,16 @@ namespace DGrok.Tests
             _codeBase.AddFileExpectingSuccess("Foo.pas", "unit Foo; interface implementation end.");
             Assert.That(_codeBase.ParsedFileCount, Is.EqualTo(1));
         }
-        [Test, ExpectedException(typeof(ParseException))]
+
+        [Test]
         public void AddFileExpectingSuccessWithError()
         {
-            _codeBase.AddFileExpectingSuccess("Foo.pas", "");
+            Assert.Throws<ParseException>(delegate
+            {
+                _codeBase.AddFileExpectingSuccess("Foo.pas", "");
+            });
         }
+
         [Test]
         public void AddParsedFile()
         {
@@ -162,7 +165,7 @@ namespace DGrok.Tests
             Assert.That(_codeBase.ParsedFileCount, Is.EqualTo(1), "ParsedFileCount");
             List<NamedContent<Exception>> errors = new List<NamedContent<Exception>>(_codeBase.Errors);
             Assert.That(errors.Count, Is.EqualTo(1), "Error count");
-            Assert.That(errors[0].Content, Is.InstanceOfType(typeof(DuplicateFileNameException)));
+            Assert.That(errors[0].Content, Is.InstanceOf(typeof(DuplicateFileNameException)));
             Assert.That(errors[0].Content.Message, Is.EqualTo(
                 @"File 'C:\Dir2\foo.pas' has the same name as 'C:\Dir1\Foo.pas'"));
         }
@@ -174,7 +177,7 @@ namespace DGrok.Tests
             Assert.That(_codeBase.ParsedFileCount, Is.EqualTo(1), "ParsedFileCount");
             List<NamedContent<Exception>> errors = new List<NamedContent<Exception>>(_codeBase.Errors);
             Assert.That(errors.Count, Is.EqualTo(1), "Error count");
-            Assert.That(errors[0].Content, Is.InstanceOfType(typeof(DuplicateFileNameException)));
+            Assert.That(errors[0].Content, Is.InstanceOf(typeof(DuplicateFileNameException)));
             Assert.That(errors[0].Content.Message, Is.EqualTo(
                 @"File 'C:\Dir2\foo.dpr' has the same name as 'C:\Dir1\Foo.dpr'"));
         }

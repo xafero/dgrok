@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using System.Text;
 using DGrok.Framework;
 
 namespace DGrok.Tests.Visitors

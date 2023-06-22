@@ -18,8 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using System.Text;
 using DGrok.Framework;
 using NUnit.Framework.Constraints;
 
@@ -35,14 +33,14 @@ namespace DGrok.Tests
             _ruleType = ruleType;
         }
 
-        public override bool Matches(object actual)
+        public override ConstraintResult ApplyTo<TActual>(TActual actual)
         {
-            string source = (string) actual;
+            string source = (string)(object)actual;
             Parser parser = ParserTestCase.CreateParser(source);
             string actualString = parser.ParseRule(_ruleType).Inspect();
             if (!parser.AtEof)
                 throw new InvalidOperationException("Rule did not consume all input");
-            return base.Matches(actualString);
+            return base.ApplyTo(actualString);
         }
     }
 }
