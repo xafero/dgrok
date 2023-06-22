@@ -37,7 +37,7 @@ namespace DGrok.Playground {
         }
 
         static void ParseFile(string filePath) {
-            var fileLoader = new FileLoader();
+            var fileLoader = new FileLoader(ignoreMissingFiles: true);
             var content = File.ReadAllText(filePath, GetFileEncoding(filePath));
             var parser = Parser.FromText(content, filePath, CompilerDefines.CreateStandard(), fileLoader);
             var parseTree = parser.ParseRule(RuleType.Goal);
@@ -48,7 +48,7 @@ namespace DGrok.Playground {
 
 
             var matches = new List<string>();
-            var fileLoader = new FileLoader();
+            var fileLoader = new FileLoader(ignoreMissingFiles: true);
             
             var path = @"E:\Work";
             foreach (var filePath in Directory.EnumerateFiles(path, "*.pas", SearchOption.TopDirectoryOnly)) {
