@@ -51,7 +51,7 @@ namespace DGrok.Framework {
 
 		public void Sort() {
 			_items.Sort(delegate (CodeBaseActionProxy a, CodeBaseActionProxy b) {
-				return String.Compare(a.Name, b.Name, StringComparison.CurrentCultureIgnoreCase);
+				return string.Compare(a.Name, b.Name, StringComparison.CurrentCultureIgnoreCase);
 			});
 		}
 	}

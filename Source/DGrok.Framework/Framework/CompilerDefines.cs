@@ -119,7 +119,7 @@ namespace DGrok.Framework {
 			DefineDirective(compilerDirective, true);
 		}
 		public void DefineSymbol(string symbol) {
-			if (String.IsNullOrEmpty(symbol)) return;
+			if (string.IsNullOrEmpty(symbol)) return;
 			_symbols.Add(symbol);
 			DefineDirectiveAsTrue("IFDEF " + symbol);
 			DefineDirectiveAsTrue("IF Defined(" + symbol + ")");

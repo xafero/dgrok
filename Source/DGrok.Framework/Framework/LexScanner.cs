@@ -154,10 +154,10 @@ namespace DGrok.Framework {
 				(ch >= 'a' && ch <= 'f');
 		}
 		private bool IsWordContinuationChar(char ch) {
-			return (Char.IsLetterOrDigit(ch) || ch == '_');
+			return (char.IsLetterOrDigit(ch) || ch == '_');
 		}
 		private bool IsWordLeadChar(char ch) {
-			return (Char.IsLetter(ch) || ch == '_');
+			return (char.IsLetter(ch) || ch == '_');
 		}
 		private Match NextMatch() {
 			return
@@ -175,7 +175,7 @@ namespace DGrok.Framework {
 				DoubleQuotedApostrophe();
 		}
 		public Token NextToken() {
-			while(_index < _source.Length && Char.IsWhiteSpace(_source[_index]))
+			while(_index < _source.Length && char.IsWhiteSpace(_source[_index]))
 				++_index;
 			if(_index >= _source.Length)
 				return null;
@@ -189,21 +189,21 @@ namespace DGrok.Framework {
 			return result;
 		}
 		private Match Number() {
-			if(!Char.IsNumber(Peek(0)))
+			if(!char.IsNumber(Peek(0)))
 				return null;
 			int offset = 1;
-			while(Char.IsNumber(Peek(offset)))
+			while(char.IsNumber(Peek(offset)))
 				++offset;
 			if(Peek(offset) == '.' && Peek(offset + 1) != '.') {
 				++offset;
-				while(Char.IsNumber(Peek(offset)))
+				while(char.IsNumber(Peek(offset)))
 					++offset;
 			}
 			if(Peek(offset) == 'e' || Peek(offset) == 'E') {
 				++offset;
 				if(Peek(offset) == '+' || Peek(offset) == '-')
 					++offset;
-				while(Char.IsNumber(Peek(offset)))
+				while(char.IsNumber(Peek(offset)))
 					++offset;
 			}
 			return new Match(TokenType.Number, offset);
@@ -224,7 +224,7 @@ namespace DGrok.Framework {
 		private char Peek(int offset) {
 			if(CanRead(offset))
 				return Read(offset);
-			return Char.MaxValue;
+			return char.MaxValue;
 		}
 		private char Read(int offset) {
 			return _source[_index + offset];
@@ -272,7 +272,7 @@ namespace DGrok.Framework {
 					++offset;
 					if(Read(offset) == '$')
 						++offset;
-					while(Char.IsLetterOrDigit(Peek(offset)))
+					while(char.IsLetterOrDigit(Peek(offset)))
 						++offset;
 				}
 			}

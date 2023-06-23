@@ -49,7 +49,7 @@ namespace DGrok.Framework {
 			_categories.Sort(delegate (Category a, Category b) {
 				string aName = a.CategoryType.ToString();
 				string bName = b.CategoryType.ToString();
-				return String.Compare(aName, bName, StringComparison.CurrentCultureIgnoreCase);
+				return string.Compare(aName, bName, StringComparison.CurrentCultureIgnoreCase);
 			});
 			foreach(Category category in _categories)
 				category.Sort();

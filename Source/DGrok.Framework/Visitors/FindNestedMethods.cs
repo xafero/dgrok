@@ -33,7 +33,7 @@ namespace DGrok.Visitors {
 			_methodHierarchy.Add(node.MethodHeadingNode.NameNode.ToCode());
 			try {
 				if(_methodHierarchy.Count > 1) {
-					string path = String.Join(" -> ", _methodHierarchy.ToArray());
+					string path = string.Join(" -> ", _methodHierarchy.ToArray());
 					AddHit(node, path);
 				}
 				base.VisitMethodImplementationNode(node);

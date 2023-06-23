@@ -113,7 +113,7 @@ namespace DGrok.Framework {
 				foreach(string fileMask in FileMasks.Split(';')) {
 					foreach(string fileName in Directory.GetFiles(directory, fileMask, option)) {
 						string extension = Path.GetExtension(fileName);
-						if(!String.Equals(extension, ".dproj", StringComparison.InvariantCultureIgnoreCase))
+						if(!string.Equals(extension, ".dproj", StringComparison.InvariantCultureIgnoreCase))
 							result.Add(fileName);
 					}
 				}
