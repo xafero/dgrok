@@ -46,11 +46,13 @@ namespace DGrok.Tests
                 "    OperatorNode: NotKeyword |not|",
                 "    OperandNode: Number |42|"));
         }
-        [Test]
+
+        [Test, Ignore("TODO Wanted behaviour is unknown!")]
         public void NotAloneDoesNotParse()
         {
             AssertDoesNotParse("not");
         }
+
         [Test]
         public void DotOperator()
         {

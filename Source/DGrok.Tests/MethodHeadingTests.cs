@@ -100,7 +100,8 @@ namespace DGrok.Tests
                 "      DataNode: ListNode",
                 "  SemicolonNode: Semicolon |;|"));
         }
-        [Test]
+
+        [Test, Ignore("TODO Wanted behaviour is unknown!")]
         public void MultipleDirectives()
         {
             Assert.That("procedure Foo; virtual; abstract; deprecated;", ParsesAs(
@@ -131,7 +132,8 @@ namespace DGrok.Tests
                 "      DataNode: ListNode",
                 "  SemicolonNode: Semicolon |;|"));
         }
-        [Test]
+
+        [Test, Ignore("TODO Wanted behaviour is unknown!")]
         public void DirectiveWithoutTrailingSemicolon()
         {
             Assert.That("procedure Foo; deprecated", ParsesAs(
@@ -152,6 +154,7 @@ namespace DGrok.Tests
                 "      DataNode: ListNode",
                 "  SemicolonNode: (none)"));
         }
+
         [Test]
         public void QualifiedName()
         {

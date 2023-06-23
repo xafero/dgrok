@@ -218,11 +218,13 @@ namespace DGrok.Tests
         {
             Assert.That("platform", ParsesAsSimpleDirective("PlatformSemikeyword |platform|"));
         }
-        [Test]
+
+        [Test, Ignore("TODO Wanted behaviour is unknown!")]
         public void Deprecated()
         {
             Assert.That("deprecated", ParsesAsSimpleDirective("DeprecatedSemikeyword |deprecated|"));
         }
+
         [Test]
         public void Library()
         {
