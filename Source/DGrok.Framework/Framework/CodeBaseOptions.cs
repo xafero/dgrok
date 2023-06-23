@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.Win32;
 
 namespace DGrok.Framework {
 	public class CodeBaseOptions {
@@ -121,33 +120,5 @@ namespace DGrok.Framework {
 			}
 			return result;
 		}
-		public void LoadFromRegistry() {
-			using(RegistryKey key = Registry.CurrentUser.OpenSubKey(@"DGrok\Demo")) {
-				if(key == null)
-					return;
-				CompilerOptionsSetOff = key.GetValue("CompilerOptionsSetOff", "").ToString();
-				CompilerOptionsSetOn = key.GetValue("CompilerOptionsSetOn", "").ToString();
-				CustomDefines = key.GetValue("CustomDefines", "").ToString();
-				DelphiVersionDefine = key.GetValue("DelphiVersionDefine", "").ToString();
-				FalseIfConditions = key.GetValue("FalseIfConditions", "").ToString();
-				FileMasks = key.GetValue("FileMasks", DefaultFileMasks).ToString();
-				ParserThreadCount = (int)key.GetValue("ParserThreadCount", Environment.ProcessorCount);
-				SearchPaths = key.GetValue("SearchPaths", "").ToString();
-				TrueIfConditions = key.GetValue("TrueIfConditions", "").ToString();
-			}
-		}
-		public void SaveToRegistry() {
-			using(RegistryKey key = Registry.CurrentUser.CreateSubKey(@"DGrok\Demo")) {
-				key.SetValue("CompilerOptionsSetOff", CompilerOptionsSetOff);
-				key.SetValue("CompilerOptionsSetOn", CompilerOptionsSetOn);
-				key.SetValue("CustomDefines", CustomDefines);
-				key.SetValue("DelphiVersionDefine", DelphiVersionDefine);
-				key.SetValue("FalseIfConditions", FalseIfConditions);
-				key.SetValue("FileMasks", FileMasks);
-				key.SetValue("ParserThreadCount", ParserThreadCount);
-				key.SetValue("SearchPaths", SearchPaths);
-				key.SetValue("TrueIfConditions", TrueIfConditions);
-			}
-		}
-	}
+    }
 }

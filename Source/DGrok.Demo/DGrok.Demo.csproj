@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\DGrok.Framework\Properties\AssemblyVersion.cs" Link="Properties\AssemblyVersion.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DGrok.Framework\DGrok.Framework.csproj" />
   </ItemGroup>
 

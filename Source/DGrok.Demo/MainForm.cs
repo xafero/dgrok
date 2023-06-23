@@ -19,19 +19,18 @@
 // THE SOFTWARE.
 
 using System.Windows.Forms;
-using DGrok.Framework;
 
 namespace DGrok.Demo
 {
     public partial class MainForm : Form
     {
-        CodeBaseOptions _codeBaseOptions;
+        CodeBaseWinOptions _codeBaseOptions;
 
         public MainForm()
         {
             InitializeComponent();
 
-            _codeBaseOptions = new CodeBaseOptions();
+            _codeBaseOptions = new CodeBaseWinOptions();
             _codeBaseOptions.LoadFromRegistry();
             parseSourceTreeControl1.CodeBaseOptions = _codeBaseOptions;
             compilerOptionsControl1.CodeBaseOptions = _codeBaseOptions;
