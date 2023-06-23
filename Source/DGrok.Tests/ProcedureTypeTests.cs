@@ -201,7 +201,7 @@ namespace DGrok.Tests
         [Test]
         public void ToCodeWithoutTrailingDirectives()
         {
-            Parser parser = Parser.FromText("procedure of object", "",
+            Parser parser = Parser.FromText("procedure of object", "test.pas",
                 CompilerDefines.CreateEmpty(), new MemoryFileLoader());
             AstNode node = parser.ParseRule(RuleType);
             Assert.That(node.ToCode(), Is.EqualTo("procedure of object"));

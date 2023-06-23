@@ -40,7 +40,7 @@ namespace DGrok.Framework {
 			_emptyList = CreateEmptyListNode<AstNode>();
 
 			switch(Path.GetExtension(frame.Location.FileName).ToLowerInvariant()) {
-				case ".pas": AddPasFileRules(); break;
+				case ".dpr": case ".pas": AddPasFileRules(); break;
 				case ".dfm": AddDfmFileRules(); break;
 				default: throw new ParseException("Unrecognised Extension", frame.Location);
 			}

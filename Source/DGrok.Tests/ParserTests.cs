@@ -32,7 +32,7 @@ namespace DGrok.Tests
         [SetUp]
         public void SetUp()
         {
-            _parser = Parser.FromText("Foo.Bar.Baz", "",
+            _parser = Parser.FromText("Foo.Bar.Baz", "test.pas",
                 CompilerDefines.CreateEmpty(), new MemoryFileLoader());
         }
 
