@@ -31,15 +31,16 @@ namespace DGrok.Framework {
 
 		public Parser(IFrame frame) {
 			RuleType maxRuleType = 0;
-			foreach(RuleType ruleType in Enum.GetValues(typeof(RuleType))) {
-				if(ruleType > maxRuleType) maxRuleType = ruleType;
+			foreach (RuleType ruleType in Enum.GetValues(typeof(RuleType))) {
+				if (ruleType > maxRuleType) maxRuleType = ruleType;
 			}
-			_rules = new Rule[((int)maxRuleType) + 1];
+			_rules = new Rule[((int) maxRuleType) + 1];
 
 			_nextFrame = frame;
 			_emptyList = CreateEmptyListNode<AstNode>();
 
-			switch(Path.GetExtension(frame.Location.FileName).ToLowerInvariant()) {
+            var ext = Path.GetExtension(frame.Location.FileName);
+            switch (ext.ToLowerInvariant()) {
 				case ".dpr": case ".pas": AddPasFileRules(); break;
 				case ".dfm": AddDfmFileRules(); break;
 				default: throw new ParseException("Unrecognised Extension", frame.Location);
@@ -634,9 +635,18 @@ namespace DGrok.Framework {
 				return new IfStatementNode(theIf, condition, then, thenStatement,
 					theElse, elseStatement);
 			});
-			#endregion
-			#region ImplementationDecl
-			Alternator implementationDeclAlternator = new Alternator();
+            #endregion
+            #region IfDefinedStatement
+            AddRule(RuleType.IfDefinedStatement, LookAhead(TokenType.IfKeyword), delegate
+            {
+                Token theIf = ParseToken(TokenType.IfKeyword);
+                AstNode condition = ParseRuleInternal(RuleType.Expression);
+
+                return new IfDefinedStatementNode(theIf, condition);
+            });
+            #endregion
+            #region ImplementationDecl
+            Alternator implementationDeclAlternator = new Alternator();
 			implementationDeclAlternator.AddRule(RuleType.AssemblyAttribute);
 			implementationDeclAlternator.AddRule(RuleType.ConstSection);
 			implementationDeclAlternator.AddRule(RuleType.ExportsStatement);

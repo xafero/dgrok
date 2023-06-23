@@ -19,19 +19,25 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using DGrok.DelphiNodes;
 
 namespace DGrok.Framework {
 	public class CompilerDefines {
 		private Dictionary<string, bool> _dictionary;
+		private List<string> _symbols;
 
 		private CompilerDefines() {
 			_dictionary = new Dictionary<string, bool>(StringComparer.InvariantCultureIgnoreCase);
+			_symbols = new List<string>();
 		}
 
 		public CompilerDefines Clone() {
 			CompilerDefines clone = CompilerDefines.CreateEmpty();
-			foreach(KeyValuePair<string, bool> pair in _dictionary)
+			foreach (KeyValuePair<string, bool> pair in _dictionary)
 				clone.DefineDirective(pair.Key, pair.Value);
+			foreach (string symbol in _symbols)
+                clone.DefineSymbol(symbol);
 			return clone;
 		}
 		public static CompilerDefines CreateEmpty() {
@@ -84,7 +90,6 @@ namespace DGrok.Framework {
 			defines.DefineDirectiveAsFalse("IF GenericVariants");
 			defines.DefineDirectiveAsFalse("IFOPT R-");
 			
-
 			// Version tags. Not surprisingly, you should DefineSymbol() only one.
 			defines.UndefineSymbol("VER80");  // Delphi 1
 			defines.UndefineSymbol("VER90");  // Delphi 2
@@ -99,8 +104,8 @@ namespace DGrok.Framework {
 			defines.UndefineSymbol("VER160"); // Delphi 8 for .NET
 			defines.UndefineSymbol("VER170"); // Delphi 2005
 			defines.UndefineSymbol("VER180"); // Delphi 2006
-											  // Need: VERxxx value for Delphi 2007 for Win32
-											  // Need: VERxxx value for CodeGear RAD Studio 2007
+			// Need: VERxxx value for Delphi 2007 for Win32
+			// Need: VERxxx value for CodeGear RAD Studio 2007
 
 			return defines;
 		}
@@ -114,27 +119,97 @@ namespace DGrok.Framework {
 			DefineDirective(compilerDirective, true);
 		}
 		public void DefineSymbol(string symbol) {
-			if(String.IsNullOrEmpty(symbol)) return;
+			if (String.IsNullOrEmpty(symbol)) return;
+			_symbols.Add(symbol);
 			DefineDirectiveAsTrue("IFDEF " + symbol);
 			DefineDirectiveAsTrue("IF Defined(" + symbol + ")");
 			DefineDirectiveAsFalse("IFNDEF " + symbol);
 			DefineDirectiveAsFalse("IF not Defined(" + symbol + ")");
 		}
 		public bool IsTrue(string compilerDirective, Location location) {
-			if(_dictionary.ContainsKey(compilerDirective))
+			if (_dictionary.ContainsKey(compilerDirective))
 				return _dictionary[compilerDirective];
-			if(compilerDirective.StartsWith("IFDEF ", StringComparison.InvariantCultureIgnoreCase))
+			if (compilerDirective.StartsWith("IFDEF ", StringComparison.InvariantCultureIgnoreCase))
 				return false;
-			if(compilerDirective.StartsWith("IFNDEF ", StringComparison.InvariantCultureIgnoreCase))
+			if (compilerDirective.StartsWith("IFNDEF ", StringComparison.InvariantCultureIgnoreCase))
 				return true;
-			throw new PreprocessorException("Compiler directive '" + compilerDirective +
-				"' has not been defined as either true or false", location);
+				
+            Parser parser = Parser.FromText(compilerDirective, "input.pas", CompilerDefines.CreateStandard(),
+                new MemoryFileLoader());
+            AstNode definedRule = parser.ParseRule(RuleType.IfDefinedStatement);
+			
+			try
+			{
+				var result = Evaluate(definedRule, _symbols);
+				_dictionary.Add(compilerDirective, result);
+				return result;
+			}
+			catch
+			{
+				throw new PreprocessorException("Compiler directive '" + compilerDirective +
+					"' has not been defined as either true or false", location);
+			}
 		}
+		
 		public void UndefineSymbol(string symbol) {
 			DefineDirectiveAsTrue("IFNDEF " + symbol);
 			DefineDirectiveAsTrue("IF not Defined(" + symbol + ")");
 			DefineDirectiveAsFalse("IFDEF " + symbol);
 			DefineDirectiveAsFalse("IF Defined(" + symbol + ")");
 		}
+		
+		        private static bool Evaluate(AstNode definedNode, List<string> symbols)
+        {
+            if (definedNode is IfDefinedStatementNode)
+            {
+                return Evaluate(((IfDefinedStatementNode)definedNode).ConditionNode, symbols);
+            }
+            if (definedNode is UnaryOperationNode)
+            {
+                var opNode = (UnaryOperationNode)definedNode;
+                if (opNode.OperatorNode.Type == TokenType.NotKeyword)
+                {
+                    return !Evaluate(opNode.OperandNode, symbols);
+                }
+            }
+            if (definedNode is BinaryOperationNode)
+            {
+                var binNode = (BinaryOperationNode)definedNode;
+                var left = Evaluate(binNode.LeftNode, symbols);
+                var right = Evaluate(binNode.RightNode, symbols);
+                switch (binNode.OperatorNode.Type)
+                {
+                    case TokenType.AndKeyword: return left && right;
+                    case TokenType.OrKeyword: return left || right;
+                }
+            }
+            if (definedNode is ParenthesizedExpressionNode)
+            {
+                var parenthesizedNode = (ParenthesizedExpressionNode)definedNode;
+                if ((parenthesizedNode.OpenParenthesisNode.Type == TokenType.OpenParenthesis) &&
+                    (parenthesizedNode.CloseParenthesisNode.Type == TokenType.CloseParenthesis))
+                {
+                    return Evaluate(parenthesizedNode.ExpressionNode, symbols);
+                }
+            }
+            if (definedNode is ParameterizedNode)
+            {
+                var paramNode = (ParameterizedNode)definedNode;
+                var identifier = (paramNode.LeftNode as Token);
+                if ((paramNode.OpenDelimiterNode.Type == TokenType.OpenParenthesis) &&
+                    (paramNode.CloseDelimiterNode.Type == TokenType.CloseParenthesis) &&
+                    (paramNode.ParameterListNode.Items.Count == 1) &&
+                    (identifier != null) &&
+                    string.Equals(identifier.Text, "defined", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var itemNode = paramNode.ParameterListNode.Items[0].ItemNode as Token;
+                    if (itemNode != null)
+                    {
+                        return symbols.Contains(itemNode.Text, StringComparer.InvariantCultureIgnoreCase);
+                    }
+                }
+            }
+            throw new Exception("can't evaluate define expression");
+        }
 	}
 }

@@ -91,5 +91,48 @@ namespace DGrok.Tests
             _defines.DefineDirectiveAsTrue("IFDEF FOO");
             Assert.That(DefineIsTrue("IfDef Foo"), Is.True);
         }
+        
+        [Test]
+        public void DefinedAndTrue()
+        {
+            _defines.DefineSymbol("FOO");
+            _defines.DefineSymbol("BAR");
+            Assert.That(DefineIsTrue("if defined(Foo) and defined(Bar)"), Is.True);
+        }
+        
+        [Test]
+        public void DefinedAndFalse()
+        {
+            _defines.DefineSymbol("FOO");
+            Assert.That(DefineIsTrue("if defined(Foo) and defined(Bar)"), Is.False);
+        }
+        
+        [Test]
+        public void DefinedAndParenthesisTrue()
+        {
+            _defines.DefineSymbol("FOO");
+            _defines.DefineSymbol("BAR");
+            Assert.That(DefineIsTrue("IF (DEFINED(Foo) or defined(FOO2)) and defined(Bar)"), Is.True);
+        }
+        
+        [Test]
+        public void DefinedAndParenthesisFalse()
+        {
+            _defines.DefineSymbol("BAR");
+            Assert.That(DefineIsTrue("IF (defined(Foo) or DEFINED(FOO2)) and defined(Bar)"), Is.False);
+        }
+        
+        [Test]
+        public void DefinedOrFalse()
+        {
+            Assert.That(DefineIsTrue("if defined(Foo) or defined(Bar)"), Is.False);
+        }
+        
+        [Test]
+        public void DefinedOrTrue()
+        {
+            _defines.DefineSymbol("FOO");
+            Assert.That(DefineIsTrue("if defined(Foo) OR defined(Bar)"), Is.True);
+        }
     }
 }
