@@ -18,12 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using DGrok.Framework;
 
 namespace DGrok.DelphiNodes {
-	public partial class ConstantDeclNode : ITypeDeclaration {
+	public partial class ConstantDeclNode : ITypeDeclaration, IHasTypeNameAndVal {
 		public AstNode FirstNameNode {
 			get { return NameNode; }
 		}
-	}
+
+        public ListNode<DelimitedItemNode<Token>> NameListNode
+            => new ListNode<DelimitedItemNode<Token>>(new[]
+            {
+                new DelimitedItemNode<Token>(NameNode, default)
+            });
+    }
 }
