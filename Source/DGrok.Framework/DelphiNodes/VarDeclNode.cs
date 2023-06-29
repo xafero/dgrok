@@ -21,7 +21,7 @@
 using DGrok.Framework;
 
 namespace DGrok.DelphiNodes {
-	public partial class VarDeclNode : ITypeDeclaration, IHasTypeAndName {
+	public partial class VarDeclNode : ITypeDeclaration, IHasTypeNameAndVal {
 		public AstNode FirstNameNode {
 			get { return NameListNode.Items[0]; }
 		}
