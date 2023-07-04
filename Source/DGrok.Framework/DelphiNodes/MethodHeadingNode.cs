@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 namespace DGrok.DelphiNodes {
-	public partial class MethodHeadingNode {
+	public partial class MethodHeadingNode : IMethodLike {
 		public bool RequiresBody {
 			get {
 				foreach(DirectiveNode directive in DirectiveListNode.Items) {
