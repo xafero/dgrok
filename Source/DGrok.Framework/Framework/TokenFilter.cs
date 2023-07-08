@@ -64,6 +64,8 @@ namespace DGrok.Framework {
 			_directiveTypes["ELSEIF"] = DirectiveType.ElseIf;
 			_directiveTypes["ENDIF"] = DirectiveType.EndIf;
 			_directiveTypes["IFEND"] = DirectiveType.EndIf;
+			// Free Pascal compiler directives
+			_directiveTypes["MODE"] = DirectiveType.Ignored;
 			// Delphi compiler directives
 			_directiveTypes["ALIGN"] = DirectiveType.Ignored;
 			_directiveTypes["APPTYPE"] = DirectiveType.Ignored;
