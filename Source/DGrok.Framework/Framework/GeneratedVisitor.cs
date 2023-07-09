@@ -466,6 +466,7 @@ namespace DGrok.Framework {
 		public virtual void VisitPropertyDataNode(PropertyDataNode node)
 		{
 			Visit(node.NameNode);
+			Visit(node.EqualNode);
 			Visit(node.ValueNode);
 		}
 
