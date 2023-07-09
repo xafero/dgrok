@@ -1768,7 +1768,26 @@ namespace DGrok.Framework {
 						var closeBracket = ParseToken(TokenType.CloseBracket);
 						value = openBracket; //TODO
 
-					} else if(CanParseToken(TokenType.MinusSign)) {
+					} else if (CanParseToken(TokenType.LessThan)) {
+						var openArrow = ParseToken(TokenType.LessThan);
+						while (Peek(0) != TokenType.GreaterThan)
+						{
+							MoveNext();
+						}
+						var closeArrow = ParseToken(TokenType.GreaterThan);
+						value = openArrow; //TODO
+
+					} else if (CanParseToken(TokenType.OpenBracket)) {
+						var openCurly = ParseToken(TokenType.OpenBracket);
+						while (Peek(0) != TokenType.CloseBracket)
+						{
+							MoveNext();
+						}
+						var closeCurly = ParseToken(TokenType.CloseBracket);
+						value = openCurly; //TODO
+
+					}
+					else if (CanParseToken(TokenType.MinusSign)) {
 						var minOp = ParseToken(TokenType.MinusSign);
 						var absVal = ParseToken(TokenType.Number);
 						value = new UnaryOperationNode(minOp, absVal);
@@ -1803,6 +1822,8 @@ namespace DGrok.Framework {
 		}
 		public static Parser FromText(string text, string fileName, CompilerDefines compilerDefines,
 			IFileLoader fileLoader) {
+			if (Hacks.NeedsHack(fileName))
+				text = Hacks.ApplyPatch(text);
 			Lexer lexer = new Lexer(text, fileName);
 			TokenFilter filter = new TokenFilter(lexer.Tokens, compilerDefines, fileLoader);
 			return FromTokens(filter.Tokens);
