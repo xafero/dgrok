@@ -1769,8 +1769,9 @@ namespace DGrok.Framework {
 						value = openBracket; //TODO
 
 					} else if(CanParseToken(TokenType.MinusSign)) {
-						value = ParseToken(TokenType.MinusSign);//TODO
-						value = ParseToken(TokenType.Number);
+						var minOp = ParseToken(TokenType.MinusSign);
+						var absVal = ParseToken(TokenType.Number);
+						value = new UnaryOperationNode(minOp, absVal);
 					} else {
 						value = ParseToken(Peek(0));
 					}
