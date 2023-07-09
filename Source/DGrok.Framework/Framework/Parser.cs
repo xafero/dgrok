@@ -1737,6 +1737,16 @@ namespace DGrok.Framework {
 				return new ObjectNode(theObject, name, theColon, type, properties, theEnd);
 			});
 			#endregion
+
+			#region ItemData
+			AddRule(RuleType.DfmItemData, LookAhead(TokenType.Identifier), delegate {
+				var type = ParseToken(TokenType.Identifier);
+				var properties = ParseRequiredRuleList<AstNode>(RuleType.DfmPropertyData);
+				var theEnd = ParseToken(TokenType.EndKeyword);
+				return new ObjectItemNode(type, properties, theEnd);
+			});
+			#endregion
+
 			#region PropertyData
 			AddRule(RuleType.DfmPropertyData, parser => CanParseToken(TokenType.ObjectKeyword) || CanParseToken(TokenType.Identifier), delegate {
 				AstNode propertyDataNode;
@@ -1784,13 +1794,15 @@ namespace DGrok.Framework {
 						value = brItems;
 						
 					} else if (CanParseToken(TokenType.LessThan)) {
-						var openArrow = ParseToken(TokenType.LessThan);
+						ParseToken(TokenType.LessThan);
+						var itItems = CreateEmptyListNode<AstNode>();
 						while (Peek(0) != TokenType.GreaterThan)
 						{
-							MoveNext();
+							var itNode = ParseRuleInternal(RuleType.DfmItemData);
+							itItems.Items.Add(itNode);
 						}
-						var closeArrow = ParseToken(TokenType.GreaterThan);
-						value = openArrow; //TODO
+						ParseToken(TokenType.GreaterThan);
+						value = itItems;
 
 					} else if (CanParseToken(TokenType.MinusSign)) {
 						var minOp = ParseToken(TokenType.MinusSign);
@@ -1799,6 +1811,12 @@ namespace DGrok.Framework {
 
 					} else {
 						value = ParseToken(Peek(0));
+						while (Peek(0) == TokenType.Dot)
+						{
+							var dot = ParseToken(TokenType.Dot);
+							var extra = ParseToken(TokenSets.ExtendedIdent);
+							value = new BinaryOperationNode(value, dot, extra);
+						}
 
 						// Special curly non-comments
 						if (value is Token to && to.Type == TokenType.Identifier &&

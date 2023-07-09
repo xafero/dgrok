@@ -127,5 +127,6 @@ namespace DGrok.Framework {
 		TypeGenericParameter,
 		DfmObjectData,
 		DfmPropertyData,
+		DfmItemData
 	}
 }

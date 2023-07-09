@@ -463,6 +463,13 @@ namespace DGrok.Framework {
 			Visit(node.EndNode);
 		}
 
+		public virtual void VisitObjectItemNode(ObjectItemNode node)
+		{
+			Visit(node.ObjectTypeNode);
+			Visit(node.PropertiesNode);
+			Visit(node.EndNode);
+		}
+
 		public virtual void VisitPropertyDataNode(PropertyDataNode node)
 		{
 			Visit(node.NameNode);

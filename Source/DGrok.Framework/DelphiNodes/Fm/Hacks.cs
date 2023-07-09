@@ -32,6 +32,11 @@ namespace DGrok.DelphiNodes
 			{
 				text = text.Replace(tmp, $"r{tmp}");
 			}
+			tmp = "Name = ";
+			if (text.Contains(tmp))
+			{
+				text = text.Replace(tmp, $"r{tmp}");
+			}
 			return text;
 		}
 	}
