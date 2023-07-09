@@ -452,6 +452,17 @@ namespace DGrok.Framework {
 			Visit(node.InitSectionNode);
 			Visit(node.DotNode);
 		}
+
+		public virtual void VisitObjectNode(ObjectNode node)
+		{
+			Visit(node.ObjectKeywordNode);
+			Visit(node.ObjectNameNode);
+			Visit(node.TheColonNode);
+			Visit(node.ObjectTypeNode);
+			Visit(node.PropertiesNode);
+			Visit(node.EndNode);
+		}
+
 		public virtual void VisitUnitSectionNode(UnitSectionNode node) {
 			Visit(node.HeaderKeywordNode);
 			Visit(node.UsesClauseNode);

@@ -1734,8 +1734,7 @@ namespace DGrok.Framework {
 				var type = ParseToken(TokenType.Identifier);
 				var properties = ParseRequiredRuleList<AstNode>(RuleType.DfmPropertyData);
 				var theEnd = ParseToken(TokenType.EndKeyword);
-
-				return properties;
+				return new ObjectNode(theObject, name, theColon, type, properties, theEnd);
 			});
 			#endregion
 			#region PropertyData
