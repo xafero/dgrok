@@ -1755,10 +1755,23 @@ namespace DGrok.Framework {
 
 					AstNode value;
 					if(CanParseToken(TokenType.OpenParenthesis)) {
-						var openParanthesis = ParseToken(TokenType.OpenParenthesis);
-						var stringList = ParseTokenList(new TokenSet(TokenType.StringLiteral));
-						var closeParanthesis = ParseToken(TokenType.CloseParenthesis);
-						value = stringList;//TODO
+						ParseToken(TokenType.OpenParenthesis);
+						var itemToken = Peek(0);
+						TokenSet itemSet;
+						switch (itemToken)
+						{
+							case TokenType.StringLiteral:
+								itemSet = new TokenSet(TokenType.StringLiteral);
+								break;
+							case TokenType.Number:
+								itemSet = new TokenSet(TokenType.Number);
+								break;
+							default:
+								throw new InvalidOperationException(itemToken+" ?!");
+						}
+						var itemList = ParseTokenList(itemSet);
+						ParseToken(TokenType.CloseParenthesis);
+						value = itemList;
 
 					} else if(CanParseToken(TokenType.OpenBracket)) {
 						var openBracket = ParseToken(TokenType.OpenBracket);
@@ -1777,22 +1790,27 @@ namespace DGrok.Framework {
 						var closeArrow = ParseToken(TokenType.GreaterThan);
 						value = openArrow; //TODO
 
-					} else if (CanParseToken(TokenType.OpenBracket)) {
-						var openCurly = ParseToken(TokenType.OpenBracket);
-						while (Peek(0) != TokenType.CloseBracket)
-						{
-							MoveNext();
-						}
-						var closeCurly = ParseToken(TokenType.CloseBracket);
-						value = openCurly; //TODO
-
-					}
-					else if (CanParseToken(TokenType.MinusSign)) {
+					} else if (CanParseToken(TokenType.MinusSign)) {
 						var minOp = ParseToken(TokenType.MinusSign);
 						var absVal = ParseToken(TokenType.Number);
 						value = new UnaryOperationNode(minOp, absVal);
 					} else {
 						value = ParseToken(Peek(0));
+
+						// Special curly non-comments
+						if (value is Token to && to.Type == TokenType.Identifier &&
+						    to.Text == "_" && Peek(0) is TokenType.OpenParenthesis)
+						{
+							var openCurly = ParseToken(TokenType.OpenParenthesis);
+							while (Peek(0) != TokenType.CloseParenthesis)
+							{
+								MoveNext();
+							}
+							var closeCurly = ParseToken(TokenType.CloseParenthesis);
+							var closeMark = ParseToken(TokenType.Identifier);
+							value = openCurly; //TODO
+
+						}
 					}
 
 					propertyDataNode = new PropertyDataNode(name, theEqualSign, value);

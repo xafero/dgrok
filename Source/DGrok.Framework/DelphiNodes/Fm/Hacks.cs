@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DGrok.Framework.DelphiNodes.Fm
+namespace DGrok.DelphiNodes
 {
 	internal static class Hacks
 	{
@@ -26,6 +26,11 @@ namespace DGrok.Framework.DelphiNodes.Fm
 			{
 				var close = text.IndexOf('\'', index + 1);
 				text = text.Remove(index, close - index + 1);
+			}
+			tmp = "ReadOnly = ";
+			if (text.Contains(tmp))
+			{
+				text = text.Replace(tmp, $"r{tmp}");
 			}
 			return text;
 		}
