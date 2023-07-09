@@ -1776,7 +1776,7 @@ namespace DGrok.Framework {
 						value = ParseToken(Peek(0));
 					}
 
-					propertyDataNode = value;
+					propertyDataNode = new PropertyDataNode(name, value);
 				}
 
 				return propertyDataNode;
