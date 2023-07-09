@@ -1796,6 +1796,7 @@ namespace DGrok.Framework {
 						var minOp = ParseToken(TokenType.MinusSign);
 						var absVal = ParseToken(TokenType.Number);
 						value = new UnaryOperationNode(minOp, absVal);
+
 					} else {
 						value = ParseToken(Peek(0));
 
@@ -1803,14 +1804,28 @@ namespace DGrok.Framework {
 						if (value is Token to && to.Type == TokenType.Identifier &&
 						    to.Text == "_" && Peek(0) is TokenType.OpenParenthesis)
 						{
-							var openCurly = ParseToken(TokenType.OpenParenthesis);
-							while (Peek(0) != TokenType.CloseParenthesis)
+							ParseToken(TokenType.OpenParenthesis);
+							var sItems = CreateEmptyListNode<Token>();
+							TokenType nextTok ;
+							while ((nextTok = Peek(0)) != TokenType.CloseParenthesis)
 							{
-								MoveNext();
+								Token current;
+								switch (nextTok)
+								{
+									case TokenType.Identifier:
+										current = ParseToken(TokenType.Identifier);
+										break;
+									case TokenType.Number:
+										current = ParseToken(TokenType.Number);
+										break;
+									default:
+										throw new InvalidOperationException(nextTok + " ?!");
+								}
+								sItems.Items.Add(current);
 							}
-							var closeCurly = ParseToken(TokenType.CloseParenthesis);
-							var closeMark = ParseToken(TokenType.Identifier);
-							value = openCurly; //TODO
+							ParseToken(TokenType.CloseParenthesis);
+							ParseToken(TokenType.Identifier);
+							value = sItems;
 
 						}
 					}
