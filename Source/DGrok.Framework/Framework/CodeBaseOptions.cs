@@ -23,7 +23,7 @@ using System.IO;
 
 namespace DGrok.Framework {
 	public class CodeBaseOptions {
-		public const string DefaultFileMasks = "*.pas;*.dpr;*.dpk;*.pp";
+		public const string DefaultFileMasks = "*.pas;*.dpr;*.dpk;*.pp;*.dfm";
 
 		private CompilerOptions _compilerOptions = new CompilerOptions();
 		private string _customDefines = "";

@@ -41,11 +41,10 @@ namespace DGrok.Framework {
 
             var ext = Path.GetExtension(frame.Location.FileName);
             switch (ext.ToLowerInvariant()) {
-				case ".dpr": case ".pas": AddPasFileRules(); break;
-				case ".dfm": AddDfmFileRules(); break;
+				case ".pp": case ".dpk": case ".dpr": case ".pas": AddPasFileRules(); break;
+				case ".dfm": AddPasFileRules(); AddDfmFileRules(); break;
 				default: throw new ParseException("Unrecognised Extension", frame.Location);
 			}
-			AddPasFileRules();
 		}
 
 		private void AddPasFileRules() {
