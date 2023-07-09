@@ -1774,13 +1774,15 @@ namespace DGrok.Framework {
 						value = itemList;
 
 					} else if(CanParseToken(TokenType.OpenBracket)) {
-						var openBracket = ParseToken(TokenType.OpenBracket);
-						while(Peek(0) != TokenType.CloseBracket) {
-							MoveNext();
+						ParseToken(TokenType.OpenBracket);
+						var brItems = CreateEmptyListNode<DelimitedItemNode<AstNode>>();
+						if (CanParseRule(RuleType.Expression))
+						{
+							brItems = ParseDelimitedList<AstNode>(RuleType.Expression, TokenType.Comma);
 						}
-						var closeBracket = ParseToken(TokenType.CloseBracket);
-						value = openBracket; //TODO
-
+						ParseToken(TokenType.CloseBracket);
+						value = brItems;
+						
 					} else if (CanParseToken(TokenType.LessThan)) {
 						var openArrow = ParseToken(TokenType.LessThan);
 						while (Peek(0) != TokenType.GreaterThan)
