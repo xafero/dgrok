@@ -7,4 +7,23 @@
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>DGrok.Framework</PackageId>
+    <Title>DGrok.Framework</Title>
+    <Authors>joewhite,DvdKhl,xafero</Authors>
+    <PackageTags>dgrok delphi pascal parser</PackageTags>
+    <Description>This package is all about parsing Delphi (Object Pascal) source code.</Description>
+    <PackageProjectUrl>https://github.com/xafero/dgrok</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/xafero/dgrok</RepositoryUrl>
+    <PackageReleaseNotes>https://github.com/xafero/dgrok/releases</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Version>0.8.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
+
 </Project>
